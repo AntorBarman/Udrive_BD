@@ -331,7 +331,7 @@ window.completeBooking = async function() {
 
         console.log("💳 Sending to payment server:", paymentPayload);
 
-        const response = await fetch('http://localhost:5000/api/payment/init', {
+        const response = await fetch('/api/payment/init', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(paymentPayload)
