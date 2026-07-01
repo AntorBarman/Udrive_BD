@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC Verification - Udrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/kyc.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* আপনার অ্যালার্ট স্টাইল */
+        .booking-alert {
+            display: none;
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            margin-top: 80px;
+            margin-bottom: -20px;
+            border: 1px solid #ffeeba;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .booking-alert i { margin-right: 10px; color: #d39e00; }
+        
+        /* স্টেপগুলো বাই ডিফল্ট হাইড থাকবে, শুধু একটি ক্লাস দিয়ে দেখানো হবে */
+        .kyc-step { display: none; }
+        .kyc-step.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+    <div id="header"></div>
+
+    <div id="bookingRestrictionAlert" class="booking-alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        গাড়ি বুক করার জন্য আপনাকে অবশ্যই NID এবং ড্রাইভিং লাইসেন্স দিয়ে ভেরিফিকেশন সম্পন্ন করতে হবে।
+    </div>
+
+    <div class="kyc-page">
+        <div class="container">
+            <div class="kyc-header">
+                <h1>KYC Verification</h1>
+                <p>Complete your identity verification to start booking cars</p>
+            </div>
+
+            <div class="verification-status" id="kycStatus">
+                <div class="status-step active" id="iconStep1">
+                    <div class="step-icon"><i class="fas fa-user"></i></div>
+                    <div class="step-info"><h4>Basic Info</h4><p>Personal details</p></div>
+                </div>
+                <div class="status-step" id="iconStep2">
+                    <div class="step-icon"><i class="fas fa-id-card"></i></div>
+                    <div class="step-info"><h4>Documents</h4><p>Upload NID & License</p></div>
+                </div>
+                <div class="status-step" id="iconStep3">
+                    <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="step-info"><h4>Verification</h4><p>Review & approval</p></div>
+                </div>
+            </div>
+
+            <div class="kyc-step active" id="step1">
+                <div class="step-card">
+                    <h2>Personal Information</h2>
+                    <form id="personalInfoForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name (as per NID)</label>
+                                <input type="text" id="fullNameKyc" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="date" id="dob" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>NID Number</label>
+                                <input type="text" id="nidNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Driving License Number</label>
+                                <input type="text" id="licenseNumber" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Permanent Address</label>
+                            <textarea id="permanentAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Present Address</label>
+                            <textarea id="presentAddress" rows="3" required></textarea>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sameAsPermanent"> Same as permanent address
+                            </label>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="nextStep(1)">Continue</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="kyc-step" id="step2">
+                <div class="step-card">
+                    <h2>Document Upload</h2>
+                    <p class="step-description">Upload clear photos (NID Front, Back & Driving License).</p>
+
+                    <div class="document-section">
+                        <h3>National ID Card</h3>
+                        <div class="document-grid">
+                            <div class="document-upload-card">
+                                <div class="upload-area" onclick="document.getElementById('nidFront').click()">
+                                    <i class="fas fa-camera"></i>
+                                    <p>NID Front Side</p>
+                                    <div id="nidFrontPreview"><small>Click to upload</small></div>
+                                </div>
+                                <input type="file" id="nidFront" hidden onchange="showFileName(this)">
+                            </div>
+                            <div class="document-upload-card">
+                                <div class="upload-area" onclick="document.getElementById('nidBack').click()">
+                                    <i class="fas fa-camera"></i>
+                                    <p>NID Back Side</p>
+                                    <div id="nidBackPreview"><small>Click to upload</small></div>
+                                </div>
+                                <input type="file" id="nidBack" hidden onchange="showFileName(this)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="document-section">
+                        <h3>Driving License</h3>
+                        <div class="document-grid">
+                            <div class="document-upload-card">
+                                <div class="upload-area" onclick="document.getElementById('licenseFront').click()">
+                                    <i class="fas fa-camera"></i>
+                                    <p>License Front</p>
+                                    <div id="licenseFrontPreview"><small>Click to upload</small></div>
+                                </div>
+                                <input type="file" id="licenseFront" hidden onchange="showFileName(this)">
+                            </div>
+                            <div class="document-upload-card">
+                                <div class="upload-area" onclick="document.getElementById('licenseBack').click()">
+                                    <i class="fas fa-camera"></i>
+                                    <p>License Back (Optional)</p>
+                                    <div id="licenseBackPreview"><small>Click to upload</small></div>
+                                </div>
+                                <input type="file" id="licenseBack" hidden onchange="showFileName(this)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="goToStep(1)">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep(2)">Continue</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kyc-step" id="step3">
+                <div class="step-card">
+                    <h2>Selfie Verification</h2>
+                    <p class="step-description">Take a clear selfie while holding your NID card.</p>
+                    
+                    <div class="selfie-section">
+                        <div class="selfie-capture">
+                            <div class="camera-container" style="background:#000; height:300px; display:flex; align-items:center; justify-content:center; border-radius:10px;">
+                                <i class="fas fa-user" style="font-size:5rem; color:#555;"></i>
+                            </div>
+                            <div class="camera-controls" style="margin-top:20px; text-align:center;">
+                                <button class="btn btn-primary" onclick="alert('📸 Photo Captured! (Demo)')">
+                                    <i class="fas fa-camera"></i> Capture Photo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="goToStep(2)">Back</button>
+                        <button type="button" class="btn btn-primary" id="submitBtn" onclick="submitKYC()">Submit for Verification</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kyc-step" id="step4">
+                <div class="verification-complete">
+                    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                    <h2 id="verificationTitle">Verification Submitted!</h2>
+                    <p id="verificationDesc">Your documents are under review (Pending). Wait for Admin Approval.</p>
+                    <div class="action-buttons">
+                        <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+                        <a href="search.html" class="btn btn-outline">Browse Cars</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+        let currentStep = 1;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('ref') === 'booking') {
+                const alertBox = document.getElementById('bookingRestrictionAlert');
+                if(alertBox) alertBox.style.display = 'block';
+            }
+
+            // পেজ লোড হওয়ামাত্রই স্ট্যাটাস চেক করবে
+            checkStatus();
+        });
+
+        function goToStep(stepNum) {
+            document.querySelectorAll('.kyc-step').forEach(el => el.classList.remove('active'));
+            document.getElementById('step' + stepNum).classList.add('active');
+            
+            document.querySelectorAll('.status-step').forEach((el, index) => {
+                if (index < stepNum) el.classList.add('active');
+                else el.classList.remove('active'); 
+            });
+
+            currentStep = stepNum;
+        }
+
+        function nextStep(current) {
+            if (current === 1) {
+                const name = document.getElementById('fullNameKyc').value.trim();
+                const nid = document.getElementById('nidNumber').value.trim();
+                const dob = document.getElementById('dob').value;
+                const address = document.getElementById('permanentAddress').value.trim();
+
+                if (!name || !nid || !dob || !address) {
+                    alert("⚠️ দয়া করে নাম, জন্মতারিখ, NID এবং ঠিকানা পূরণ করুন।");
+                    return;
+                }
+                goToStep(2);
+            } 
+            else if (current === 2) {
+                const nidFile = document.getElementById('nidFront').files.length;
+                if (nidFile === 0) {
+                    alert("⚠️ দয়া করে NID কার্ডের ছবি আপলোড করুন।");
+                    return;
+                }
+                goToStep(3);
+            }
+        }
+
+        function showFileName(input) {
+            if (input.files && input.files[0]) {
+                const previewDiv = document.getElementById(input.id + 'Preview');
+                previewDiv.innerHTML = `<b style="color:green">✔ ${input.files[0].name}</b>`;
+            }
+        }
+
+        // 🚀 BULLETPROOF SUBMIT FUNCTION (INSERT এর বদলে UPSERT) 🚀
+        async function submitKYC() {
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            btn.disabled = true;
+
+            try {
+                const userStr = localStorage.getItem('udrive_user');
+                if (!userStr) throw new Error("Please login first!");
+                const user = JSON.parse(userStr);
+
+                // ✅ সঠিকভাবে ফাইল নেওয়া
+                const nidFrontFile = document.getElementById('nidFront').files[0];
+                const nidBackFile = document.getElementById('nidBack').files[0];
+                const licenseFrontFile = document.getElementById('licenseFront').files[0];
+                const licenseBackFile = document.getElementById('licenseBack').files[0];
+
+                if (!nidFrontFile) throw new Error("NID Front ছবি সিলেক্ট করুন!");
+                if (!nidBackFile) throw new Error("NID Back ছবি সিলেক্ট করুন!");
+                if (!licenseFrontFile) throw new Error("License Front ছবি সিলেক্ট করুন!");
+
+                console.log("✅ NID Front:", nidFrontFile.name, nidFrontFile.size, "bytes");
+
+                // ✅ একটা helper function দিয়ে সব ফাইল আপলোড
+                async function uploadFile(file, label) {
+                    const ext = file.name.split('.').pop() || 'jpg';
+                    const path = `documents/${user.id}_${label}_${Date.now()}.${ext}`;
+                    
+                    const { error } = await window.supabaseClient.storage
+                        .from('kyc-documents')
+                        .upload(path, file, {
+                            cacheControl: '3600',
+                            upsert: true,
+                            contentType: file.type || 'image/jpeg'
+                        });
+
+                    if (error) throw new Error(`${label} upload failed: ` + error.message);
+
+                    const { data } = window.supabaseClient.storage
+                        .from('kyc-documents')
+                        .getPublicUrl(path);
+
+                    return data.publicUrl;
+                }
+
+                // ✅ সব ফাইল আপলোড
+                const nidFrontUrl = await uploadFile(nidFrontFile, 'nid_front');
+                const nidBackUrl = await uploadFile(nidBackFile, 'nid_back');
+                const licenseFrontUrl = await uploadFile(licenseFrontFile, 'license_front');
+                const licenseBackUrl = licenseBackFile ? await uploadFile(licenseBackFile, 'license_back') : null;
+
+                console.log("✅ All files uploaded!");
+
+                // ✅ Database এ save
+                const kycData = {
+                    user_id: user.id,
+                    full_name: document.getElementById('fullNameKyc').value,
+                    nid_number: document.getElementById('nidNumber').value,
+                    status: 'pending',
+                    nid_front_url: nidFrontUrl,
+                    nid_back_url: nidBackUrl,
+                    license_front_url: licenseFrontUrl,
+                    license_back_url: licenseBackUrl,
+                    document_url: nidFrontUrl // পুরনো column এর জন্য
+                };
+
+                const { error: dbError } = await window.supabaseClient
+                    .from('kyc_verifications')
+                    .upsert(kycData, { onConflict: 'user_id' });
+
+                if (dbError) throw new Error("Database Save Failed: " + dbError.message);
+
+                alert("✅ KYC Submitted Successfully!");
+                goToStep(4);
+
+            } catch (err) {
+                console.error("Error:", err);
+                alert("⚠️ Error: " + err.message);
+            } finally {
+                btn.innerHTML = 'Submit for Verification';
+                btn.disabled = false;
+            }
+        }
+        // 🚀 SMART CHECK STATUS FUNCTION 🚀
+        async function checkStatus() {
+            try {
+                // সরাসরি Local Storage থেকে ডাটা নেওয়া হচ্ছে
+                const userStr = localStorage.getItem('udrive_user');
+                if (!userStr) return; // লগিন না থাকলে কিছুই করবে না
+                const user = JSON.parse(userStr);
+
+                const { data, error } = await window.supabaseClient
+                    .from('kyc_verifications')
+                    .select('status')
+                    .eq('user_id', user.id)
+                    .maybeSingle();
+
+                // যদি ইউজারের ডাটা পাওয়া যায় (pending বা verified)
+                if (data && (data.status === 'pending' || data.status === 'verified')) {
+                    // সরাসরি Step 4 এ পাঠিয়ে দেওয়া
+                    goToStep(4);
+                    
+                    const title = document.getElementById('verificationTitle');
+                    const desc = document.getElementById('verificationDesc');
+                    
+                    if(title) title.innerText = data.status === 'verified' ? '✅ You are Verified!' : '⏳ Verification Pending';
+                    if(desc) desc.innerText = data.status === 'verified' ? 'You can now book cars without any restriction.' : 'Your documents are under review. Wait for Admin Approval.';
+                }
+            } catch (err) {
+                console.log("No previous KYC found or error checking status:", err.message);
+            }
+        }
+    </script>
+</body>
+</html>

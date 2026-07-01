@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - Udrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0f766e;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #374151;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-links a.active {
+            color: #0f766e;
+            font-weight: 700;
+        }
+
+        .nav-links a.logout {
+            color: #ef4444;
+        }
+
+        .page-wrap {
+            padding: 35px 0 60px;
+            min-height: calc(100vh - 130px);
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .page-header h1 {
+            font-size: 1.7rem;
+            color: #1e293b;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 3px;
+        }
+
+        /* Filter tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .tab-btn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: white;
+        }
+
+        .tab-btn .count {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 1px 7px;
+            border-radius: 10px;
+            margin-left: 5px;
+            font-size: 0.78rem;
+        }
+
+        .tab-btn:not(.active) .count {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* Booking Cards */
+        .bookings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+            overflow: hidden;
+            border-left: 5px solid #e2e8f0;
+            transition: box-shadow 0.2s;
+        }
+
+        .booking-card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.11);
+        }
+
+        .booking-card.status-pending {
+            border-left-color: #f59e0b;
+        }
+
+        .booking-card.status-confirmed {
+            border-left-color: #10b981;
+        }
+
+        .booking-card.status-cancelled {
+            border-left-color: #ef4444;
+        }
+
+        .booking-card.status-completed {
+            border-left-color: #6366f1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .car-title h2 {
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .booking-id-text {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            font-family: monospace;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-confirmed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-completed {
+            background: #ede9fe;
+            color: #4c1d95;
+        }
+
+        .card-body {
+            padding: 16px 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 0.72rem;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 4px;
+        }
+
+        .info-item span {
+            font-size: 0.88rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .info-item i {
+            margin-right: 4px;
+            color: #2563eb;
+            font-size: 0.82rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            background: #f8fafc;
+            border-top: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .total-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-cancel {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-cancel:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #2563eb;
+            border: 1.5px solid #2563eb;
+        }
+
+        .btn-outline:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Cancellation Policy Banner */
+        .cancel-policy {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 10px;
+            font-size: 0.82rem;
+            color: #92400e;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .cancel-policy i {
+            color: #f59e0b;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+
+        /* States */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            padding: 10px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 60px;
+            color: #64748b;
+        }
+
+        .loading-state i {
+            font-size: 2rem;
+            color: #2563eb;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* Cancel Confirm Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.25s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-icon {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-icon i {
+            font-size: 3rem;
+            color: #ef4444;
+        }
+
+        .modal-title {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .modal-desc {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .modal-car {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .modal-car strong {
+            color: #1e293b;
+        }
+
+        .modal-car p {
+            color: #64748b;
+            margin-top: 3px;
+            font-size: 0.83rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+            justify-content: center;
+            padding: 12px;
+            font-size: 0.9rem;
+            border-radius: 10px;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-ghost {
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+        }
+
+        .btn-ghost:hover {
+            background: #e2e8f0;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10000;
+            padding: 14px 20px;
+            border-radius: 10px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            min-width: 260px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.35s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            background: #10b981;
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        .toast.info {
+            background: #2563eb;
+        }
+
+        footer {
+            background: #1e293b;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="header"></div>
+
+    <div class="page-wrap">
+        <div class="container">
+
+            <div class="page-header">
+                <div>
+                    <h1><i class="fas fa-history" style="color:#2563eb; margin-right:10px;"></i>My Trip History</h1>
+                    <p>Manage and track all your car bookings</p>
+                </div>
+                <a href="search.html" class="btn-primary">
+                    <i class="fas fa-plus"></i> New Booking
+                </a>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs" id="filterTabs">
+                <button class="tab-btn active" data-filter="all" onclick="filterBookings('all', this)">
+                    All <span class="count" id="count-all">0</span>
+                </button>
+                <button class="tab-btn" data-filter="pending" onclick="filterBookings('pending', this)">
+                    Pending <span class="count" id="count-pending">0</span>
+                </button>
+                <button class="tab-btn" data-filter="confirmed" onclick="filterBookings('confirmed', this)">
+                    Confirmed <span class="count" id="count-confirmed">0</span>
+                </button>
+                <button class="tab-btn" data-filter="cancelled" onclick="filterBookings('cancelled', this)">
+                    Cancelled <span class="count" id="count-cancelled">0</span>
+                </button>
+                <button class="tab-btn" data-filter="completed" onclick="filterBookings('completed', this)">
+                    Completed <span class="count" id="count-completed">0</span>
+                </button>
+            </div>
+
+            <!-- Bookings List -->
+            <div class="bookings-list" id="bookingsList">
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading your bookings...</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Cancel Confirm Modal -->
+    <div class="modal-overlay" id="cancelModal" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="modal-title">Cancel This Booking?</div>
+            <div class="modal-desc">
+                Are you sure you want to cancel this booking? This action cannot be undone.
+            </div>
+            <div class="modal-car" id="modalCarInfo">
+                <strong>—</strong>
+                <p>—</p>
+            </div>
+            <div
+                style="background:#fef2f2; border-radius:8px; padding:10px 14px; margin-bottom:20px; font-size:0.82rem; color:#991b1b;">
+                <i class="fas fa-info-circle"></i>
+                <strong> Cancellation Policy:</strong> Cancellations made before pickup time are eligible for review.
+                Refunds are processed within 3–5 business days subject to platform policy.
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-ghost" onclick="closeCancelModal()">
+                    <i class="fas fa-arrow-left"></i> Go Back
+                </button>
+                <button class="btn btn-danger" id="confirmCancelBtn" onclick="confirmCancel()">
+                    <i class="fas fa-times-circle"></i> Yes, Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+
+    <script>
+        // ============================================================
+        // bookings.html — With Cancel Booking Feature
+        // ============================================================
+
+        let ALL_BOOKINGS = [];   // সব booking data
+        let CURRENT_FILTER = 'all';
+        let CANCEL_BOOKING_ID = null; // যেটা cancel করতে চাওয়া হচ্ছে
+
+        // ── Page Load ────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadHeader();
+            loadFooter();
+            await loadBookings();
+        });
+
+        // ── Bookings Load ────────────────────────────────────────────
+        async function loadBookings() {
+            const container = document.getElementById('bookingsList');
+
+            const userData = localStorage.getItem('udrive_user');
+            if (!userData) {
+                container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-lock"></i>
+                <h3>Please Login</h3>
+                <p>You need to be logged in to view your bookings.</p>
+                <a href="login.html" class="btn-primary">Login Now</a>
+            </div>`;
+                return;
+            }
+
+            if (!window.supabaseClient) {
+                container.innerHTML = `<p style="text-align:center;color:red;padding:30px;">Database connection missing.</p>`;
+                return;
+            }
+
+            try {
+                const user = JSON.parse(userData);
+
+                const { data: bookings, error } = await window.supabaseClient
+                    .from('bookings')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false });
+
+                // order এ error হলে fallback
+                if (error && error.message.includes('column')) {
+                    const { data: b2, error: e2 } = await window.supabaseClient
+                        .from('bookings').select('*').eq('user_id', user.id);
+                    if (e2) throw e2;
+                    ALL_BOOKINGS = (b2 || []).reverse();
+                } else {
+                    if (error) throw error;
+                    ALL_BOOKINGS = bookings || [];
+                }
+
+                updateCounts();
+                renderBookings(ALL_BOOKINGS);
+
+            } catch (err) {
+                console.error("Booking Fetch Error:", err);
+                container.innerHTML = `
+            <div style="text-align:center;padding:30px;color:#ef4444;background:#fef2f2;border-radius:10px;">
+                <i class="fas fa-exclamation-triangle" style="font-size:2rem;margin-bottom:10px;display:block;"></i>
+                <h3>Failed to load bookings</h3>
+                <p>${err.message}</p>
+                <button onclick="window.location.reload()" class="btn-primary" style="margin-top:12px;">
+                    <i class="fas fa-redo"></i> Retry
+                </button>
+            </div>`;
+            }
+        }
+
+        // ── Count update for tabs ─────────────────────────────────────
+        function updateCounts() {
+            const counts = { all: ALL_BOOKINGS.length, pending: 0, confirmed: 0, cancelled: 0, completed: 0 };
+            ALL_BOOKINGS.forEach(b => {
+                const s = (b.status || 'pending').toLowerCase();
+                if (counts[s] !== undefined) counts[s]++;
+            });
+            Object.keys(counts).forEach(k => {
+                const el = document.getElementById('count-' + k);
+                if (el) el.textContent = counts[k];
+            });
+        }
+
+        // ── Filter ───────────────────────────────────────────────────
+        function filterBookings(filter, btn) {
+            CURRENT_FILTER = filter;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            const filtered = filter === 'all'
+                ? ALL_BOOKINGS
+                : ALL_BOOKINGS.filter(b => (b.status || 'pending').toLowerCase() === filter);
+
+            renderBookings(filtered);
+        }
+
+        // ── Render Booking Cards ─────────────────────────────────────
+        function renderBookings(bookings) {
+            const container = document.getElementById('bookingsList');
+            if (!container) return;
+
+            if (!bookings || bookings.length === 0) {
+                const msg = CURRENT_FILTER === 'all'
+                    ? "You haven't made any bookings yet."
+                    : `No ${CURRENT_FILTER} bookings found.`;
+                container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-car-side"></i>
+                <h3>No Bookings Found</h3>
+                <p>${msg}</p>
+                <a href="search.html" class="btn-primary">
+                    <i class="fas fa-search"></i> Browse Cars
+                </a>
+            </div>`;
+                return;
+            }
+
+            container.innerHTML = bookings.map(booking => buildBookingCard(booking)).join('');
+        }
+
+        // ── Build Single Booking Card ─────────────────────────────────
+        function buildBookingCard(booking) {
+            const status = (booking.status || 'pending').toLowerCase();
+            const bId = (booking.booking_id || booking.id || 'N/A').toString().substring(0, 8).toUpperCase();
+            const carName = booking.car_name || 'Vehicle';
+            const pickup = formatDate(booking.pickup_date);
+            const returnD = formatDate(booking.return_date);
+            const location = booking.pickup_location || 'Dhaka';
+            const price = parseFloat(booking.total_price || 0).toLocaleString();
+            const bookingDbId = booking.booking_id || booking.id;
+
+            // Status badge icon
+            const statusIcons = { pending: 'fa-clock', confirmed: 'fa-check-circle', cancelled: 'fa-times-circle', completed: 'fa-flag-checkered' };
+            const statusIcon = statusIcons[status] || 'fa-circle';
+
+            // Cancel button শুধু pending অথবা confirmed এ দেখাবে
+            // এবং pickup সময় এর আগে হলেই দেখাবে
+            const canCancel = (status === 'pending' || status === 'confirmed') && isBeforePickup(booking.pickup_date);
+
+            // Cancellation notice for confirmed bookings
+            const cancelNotice = status === 'confirmed' && canCancel
+                ? `<div class="cancel-policy">
+               <i class="fas fa-info-circle"></i>
+               <span>Cancellation is available before pickup. Refund subject to platform policy.</span>
+           </div>`
+                : '';
+
+            // Action buttons
+            let actionButtons = '';
+            if (canCancel) {
+                actionButtons += `
+            <button class="btn btn-cancel"
+                    onclick="openCancelModal('${bookingDbId}', '${escapeStr(carName)}', '${pickup}', '${returnD}')">
+                <i class="fas fa-times-circle"></i> Cancel Booking
+            </button>`;
+            }
+            if (status === 'cancelled') {
+                actionButtons += `
+            <a href="search.html" class="btn btn-outline">
+                <i class="fas fa-redo"></i> Book Again
+            </a>`;
+            }
+
+            return `
+        <div class="booking-card status-${status}" id="booking-card-${bookingDbId}">
+            <div class="card-header">
+                <div class="car-title">
+                    <h2><i class="fas fa-car" style="color:#2563eb; margin-right:6px;"></i>${carName}</h2>
+                    <span class="booking-id-text">Booking ID: #${bId}</span>
+                </div>
+                <span class="status-badge badge-${status}">
+                    <i class="fas ${statusIcon}"></i>
+                    ${status.charAt(0).toUpperCase() + status.slice(1)}
+                </span>
+            </div>
+
+            <div class="card-body">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Pickup Date</label>
+                        <span><i class="far fa-calendar-check"></i> ${pickup}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Return Date</label>
+                        <span><i class="far fa-calendar-times"></i> ${returnD}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Location</label>
+                        <span><i class="fas fa-map-marker-alt"></i> ${location}</span>
+                    </div>
+                    ${booking.driver_name ? `
+                    <div class="info-item">
+                        <label>Driver</label>
+                        <span><i class="fas fa-user"></i> ${booking.driver_name}</span>
+                    </div>` : ''}
+                    ${booking.driver_phone ? `
+                    <div class="info-item">
+                        <label>Phone</label>
+                        <span><i class="fas fa-phone"></i> ${booking.driver_phone}</span>
+                    </div>` : ''}
+                    ${booking.transaction_id ? `
+                    <div class="info-item">
+                        <label>Transaction ID</label>
+                        <span><i class="fas fa-receipt"></i> ${booking.transaction_id.substring(0, 12)}...</span>
+                    </div>` : ''}
+                </div>
+                ${cancelNotice}
+            </div>
+
+            <div class="card-footer">
+                <div class="total-price">৳${price}</div>
+                <div class="card-actions">
+                    ${actionButtons}
+                </div>
+            </div>
+        </div>`;
+        }
+
+        // ── Cancel Modal ─────────────────────────────────────────────
+        function openCancelModal(bookingId, carName, pickup, returnDate) {
+            CANCEL_BOOKING_ID = bookingId;
+
+            const info = document.getElementById('modalCarInfo');
+            if (info) {
+                info.innerHTML = `
+            <strong><i class="fas fa-car"></i> ${carName}</strong>
+            <p><i class="fas fa-calendar"></i> ${pickup} → ${returnDate}</p>`;
+            }
+
+            const modal = document.getElementById('cancelModal');
+            if (modal) modal.style.display = 'flex';
+
+            // Reset button state
+            const btn = document.getElementById('confirmCancelBtn');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-times-circle"></i> Yes, Cancel';
+            }
+        }
+
+        function closeCancelModal() {
+            const modal = document.getElementById('cancelModal');
+            if (modal) modal.style.display = 'none';
+            CANCEL_BOOKING_ID = null;
+        }
+
+        // Modal background click এ close
+        document.getElementById('cancelModal').addEventListener('click', function (e) {
+            if (e.target === this) closeCancelModal();
+        });
+
+        // ── Confirm Cancel ───────────────────────────────────────────
+        async function confirmCancel() {
+            if (!CANCEL_BOOKING_ID) return;
+
+            const btn = document.getElementById('confirmCancelBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelling...';
+
+            try {
+                if (!window.supabaseClient) throw new Error("Database connection missing!");
+
+                // ১. bookings table এ status update করো
+                const { error: updateError } = await window.supabaseClient
+                    .from('bookings')
+                    .update({
+                        status: 'cancelled',
+                        cancelled_at: new Date().toISOString()
+                    })
+                    .eq('booking_id', CANCEL_BOOKING_ID);
+
+                // booking_id column এ match না হলে id দিয়ে try
+                if (updateError) {
+                    const { error: e2 } = await window.supabaseClient
+                        .from('bookings')
+                        .update({
+                            status: 'cancelled',
+                            cancelled_at: new Date().toISOString()
+                        })
+                        .eq('id', CANCEL_BOOKING_ID);
+
+                    if (e2) throw e2;
+                }
+
+                // ২. Local data আপডেট
+                ALL_BOOKINGS = ALL_BOOKINGS.map(b => {
+                    const id = b.booking_id || b.id;
+                    if (String(id) === String(CANCEL_BOOKING_ID)) {
+                        return { ...b, status: 'cancelled' };
+                    }
+                    return b;
+                });
+
+                // ৩. Modal বন্ধ করো
+                closeCancelModal();
+
+                // ৪. UI আপডেট
+                updateCounts();
+                filterBookings(CURRENT_FILTER, null);
+
+                // ৫. Success toast
+                showToast('✅ Booking cancelled successfully!', 'success');
+
+                console.log("✅ Booking cancelled:", CANCEL_BOOKING_ID);
+
+            } catch (err) {
+                console.error("Cancel Error:", err);
+                showToast('❌ Failed to cancel: ' + err.message, 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-times-circle"></i> Yes, Cancel';
+            }
+        }
+
+        // ── Helper: Pickup এর আগে কিনা check ────────────────────────
+        function isBeforePickup(pickupDate) {
+            if (!pickupDate) return false;
+            try {
+                const pickup = new Date(pickupDate);
+                const now = new Date();
+                return now < pickup; // pickup সময়ের আগে থাকলে cancel করা যাবে
+            } catch {
+                return false;
+            }
+        }
+
+        // ── Helper: Date format করা ──────────────────────────────────
+        function formatDate(str) {
+            if (!str) return 'N/A';
+            try {
+                return new Date(str).toLocaleString('en-BD', {
+                    day: 'numeric', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            } catch { return str; }
+        }
+
+        // ── Helper: String escape ─────────────────────────────────────
+        function escapeStr(str) {
+            return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        }
+
+        // ── Toast Notification ────────────────────────────────────────
+        function showToast(msg, type = 'info') {
+            document.querySelectorAll('.toast').forEach(t => t.remove());
+
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas ${icons[type] || 'fa-info-circle'}"></i> ${msg}`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'none';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(120%)';
+                toast.style.transition = 'all 0.35s ease';
+                setTimeout(() => toast.remove(), 350);
+            }, 3500);
+        }
+
+        // ── Header & Footer ───────────────────────────────────────────
+        function loadHeader() {
+            const user = localStorage.getItem('udrive_user');
+            const headerEl = document.getElementById('header');
+            if (!headerEl) return;
+            headerEl.innerHTML = `
+        <header>
+            <div class="container header-inner">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-car" style="color:#ef4444; margin-right:5px;"></i> Udrive
+                </a>
+                <div class="nav-links">
+                    <a href="search.html">Find Cars</a>
+                    <a href="bookings.html" class="active">My Bookings</a>
+                    ${user
+                    ? `<a href="#" class="logout" onclick="handleLogout(event)">Logout</a>`
+                    : `<a href="login.html" style="color:#0f766e;font-weight:bold;">Login</a>`
+                }
+                </div>
+            </div>
+        </header>`;
+        }
+
+        function loadFooter() {
+            const el = document.getElementById('footer');
+            if (el) el.innerHTML = `<footer>&copy; 2026 Udrive Bangladesh. All rights reserved.</footer>`;
+        }
+
+        function handleLogout(e) {
+            e.preventDefault();
+            localStorage.removeItem('udrive_user');
+            if (window.supabaseClient) window.supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

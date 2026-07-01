@@ -1,0 +1,161 @@
+/* Search Page Styles */
+.search-page {
+    padding: 2rem 0;
+    min-height: 70vh;
+}
+
+.search-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+}
+
+.filters-sidebar {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.filters-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.filter-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.filter-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.filter-section h4 {
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-options label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.price-slider {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.price-range {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.sort-options select {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: white;
+}
+
+.cars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.car-card-search {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s;
+}
+
+.car-card-search:hover {
+    transform: translateY(-5px);
+}
+
+.car-image-search {
+    height: 200px;
+    overflow: hidden;
+}
+
+.car-image-search img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.car-details-search {
+    padding: 1.5rem;
+}
+
+.car-meta {
+    display: flex;
+    gap: 1rem;
+    margin: 0.5rem 0;
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.car-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.car-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.car-price-search {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.page-info {
+    padding: 0.5rem 1rem;
+    background: var(--light);
+    border-radius: 5px;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}

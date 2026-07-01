@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Fleet Dashboard - UDrive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container mx-auto mt-10 p-5">
+        <h2 class="text-3xl font-bold mb-6 text-center text-blue-600">🚦 Live Car Dashboard</h2>
+        
+        <div class="overflow-x-auto bg-white rounded-lg shadow">
+            <table class="min-w-full text-left">
+                <thead class="bg-gray-800 text-white">
+                    <tr>
+                        <th class="py-3 px-4">Car Details</th>
+                        <th class="py-3 px-4">Live Status</th>
+                        <th class="py-3 px-4">Expected Return</th>
+                        <th class="py-3 px-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="live-table-body">
+                    <tr><td colspan="4" class="text-center py-5 text-gray-500">Loading Live Data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="./js/liveDashboard.js"></script>
+</body>
+</html>

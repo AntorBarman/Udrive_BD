@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udrive - Self-Drive Car Rental</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Basic Styles to ensure UI looks good */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f3f4f6; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        /* Header */
+        header { background: white; padding: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #2563eb; text-decoration: none; }
+        
+        /* Cars Grid */
+        h2 { text-align: center; margin-bottom: 30px; color: #1e293b; }
+        .cars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        
+        /* Car Card */
+        .car-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; }
+        .car-card:hover { transform: translateY(-5px); }
+        .car-image { width: 100%; height: 200px; object-fit: cover; background: #eee; }
+        .car-info { padding: 20px; }
+        .car-info h3 { margin-bottom: 10px; }
+        .price { color: #2563eb; font-weight: bold; font-size: 1.2rem; display: block; margin-top: 10px; }
+        
+        /* Loading/Error States */
+        .status-msg { grid-column: 1 / -1; text-align: center; padding: 40px; font-size: 1.2rem; }
+        .error { color: red; background: #fee2e2; padding: 20px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Udrive Bangladesh</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Available Cars</h2>
+        <div id="carsContainer" class="cars-grid">
+            <div class="status-msg">Loading cars from Supabase...</div>
+        </div>
+    </div>
+
+    <script>
+        // Debugging Log
+        console.log("NEW VERSION LOADED - Checking Connections...");
+
+        // 1. CONFIGURATION
+        const SUPABASE_URL = 'https://fexlbeisbmrfkmowmoyl.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_QCr5ByAnNJOfMuOJnywv_g_AHzWoLrd';
+
+        // 2. MAIN FUNCTION
+        async function loadCars() {
+            const container = document.getElementById('carsContainer');
+
+            try {
+                // Check SDK
+                if (typeof window.supabase === 'undefined') {
+                    throw new Error("Supabase SDK script failed to load.");
+                }
+
+                // Initialize (FIXED: Using SUPABASE_ANON_KEY instead of SUPABASE_KEY)
+                const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log("Supabase Client Initialized");
+
+                // Fetch Data
+                const { data: cars, error } = await client
+                    .from('cars')
+                    .select('*');
+
+                if (error) throw error;
+
+                // Check Data
+                if (!cars || cars.length === 0) {
+                    container.innerHTML = '<div class="status-msg">Database connection successful, but no cars found in the table.</div>';
+                    return;
+                }
+
+                // Render Data
+                container.innerHTML = cars.map(car => `
+                    <div class="car-card">
+                        <img src="${car.image || 'https://via.placeholder.com/400x250'}" alt="${car.name}" class="car-image">
+                        <div class="car-info">
+                            <h3>${car.name}</h3>
+                            <div class="details">
+                                <span>Transmission: ${car.transmission || 'Auto'}</span>
+                                <span class="price">৳${car.price || 0} / Day</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error("FULL ERROR:", err);
+                container.innerHTML = `
+                    <div class="status-msg error">
+                        <h3>Error Detected</h3>
+                        <p>${err.message}</p>
+                        <small>Check Console (F12) for details.</small>
+                    </div>
+                `;
+            }
+        }
+
+        // Run when page loads
+        document.addEventListener('DOMContentLoaded', loadCars);
+    </script>
+</body>
+</html>

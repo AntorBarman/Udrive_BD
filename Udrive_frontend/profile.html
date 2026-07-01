@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Udrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile-page.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Profile Page -->
+    <div class="profile-page">
+        <div class="container">
+            <div class="profile-layout">
+                <!-- Profile Sidebar -->
+                <aside class="profile-sidebar">
+                    <div class="profile-card">
+                        <div class="profile-avatar">
+                            <img id="userAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Profile Picture">
+                        </div>
+                        <h2 id="userName">John Doe</h2>
+                        <p class="profile-email" id="userEmail">john.doe@example.com</p>
+                        
+                        <div class="profile-rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.8</span>
+                            <span class="stat-label">(12 reviews)</span>
+                        </div>
+                        
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalBookings">5</div>
+                                <div class="stat-label">Bookings</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalCars">2</div>
+                                <div class="stat-label">Cars Listed</div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-actions">
+                            <button class="btn btn-primary btn-block" id="editProfileBtn">
+                                <i class="fas fa-edit"></i> Edit Profile
+                            </button>
+                            <button class="btn btn-outline btn-block" id="listCarBtn">
+                                <i class="fas fa-plus"></i> List Your Car
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+                
+                <!-- Profile Content -->
+                <main class="profile-content">
+                    <div class="profile-tabs">
+                        <button class="tab-btn active" data-tab="bookings">My Bookings</button>
+                        <button class="tab-btn" data-tab="cars">My Cars</button>
+                        <button class="tab-btn" data-tab="reviews">My Reviews</button>
+                        <button class="tab-btn" data-tab="settings">Settings</button>
+                    </div>
+                    
+                    <!-- Bookings Tab -->
+                    <div id="bookings-tab" class="tab-content active">
+                        <h2 class="section-title">My Bookings</h2>
+                        <div class="bookings-list" id="bookingsList">
+                            <!-- Bookings will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Cars Tab -->
+                    <div id="cars-tab" class="tab-content">
+                        <div class="section-header">
+                            <h2 class="section-title">My Listed Cars</h2>
+                            <button class="btn btn-primary" id="addCarBtn">
+                                <i class="fas fa-plus"></i> Add New Car
+                            </button>
+                        </div>
+                        <div class="cars-grid" id="carsList">
+                            <!-- Cars will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Reviews Tab -->
+                    <div id="reviews-tab" class="tab-content">
+                        <h2 class="section-title">My Reviews</h2>
+                        <div class="reviews-list" id="reviewsList">
+                            <!-- Reviews will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Settings Tab -->
+                    <div id="settings-tab" class="tab-content">
+                        <h2 class="section-title">Account Settings</h2>
+                        <form class="settings-form" id="settingsForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" value="John" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" value="Doe" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" value="john.doe@example.com" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" value="+880 1711-223344">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea id="address" rows="3">Gulshan, Dhaka</textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="license">Driver's License Number</label>
+                                <input type="text" id="license" value="DL-123456789">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="avatar">Profile Picture URL</label>
+                                <input type="url" id="avatar" value="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                            </div>
+                            
+                            <h3 class="section-title section-title-small">Change Password</h3>
+                            
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="newPassword">New Password</label>
+                                    <input type="password" id="newPassword">
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword">Confirm New Password</label>
+                                    <input type="password" id="confirmPassword">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group form-actions-row">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                                <button type="button" class="btn btn-outline" id="cancelBtn">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="danger-zone">
+                            <h3 class="section-title">Danger Zone</h3>
+                            <p class="danger-text">Once you delete your account, there is no going back. Please be certain.</p>
+                            <button class="btn btn-danger" id="deleteAccountBtn">
+                                <i class="fas fa-trash"></i> Delete My Account
+                            </button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script>
+        // Mock bookings data (এটি পরে ডাইনামিক করা যাবে)
+        const mockBookings = [
+            {
+                id: 1,
+                carId: 1,
+                carName: "Toyota Allion 2020",
+                carImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+                pickupDate: "2024-01-20",
+                returnDate: "2024-01-25",
+                pickupLocation: "Gulshan, Dhaka",
+                totalPrice: 17500,
+                status: "confirmed",
+                bookingDate: "2024-01-10"
+            },
+            {
+                id: 2,
+                carId: 2,
+                carName: "Honda City 2021",
+                carImage: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+                pickupDate: "2024-02-01",
+                returnDate: "2024-02-03",
+                pickupLocation: "Banani, Dhaka",
+                totalPrice: 6400,
+                status: "pending",
+                bookingDate: "2024-01-15"
+            },
+            {
+                id: 3,
+                carId: 3,
+                carName: "Toyota Land Cruiser",
+                carImage: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+                pickupDate: "2023-12-15",
+                returnDate: "2023-12-20",
+                pickupLocation: "Uttara, Dhaka",
+                totalPrice: 42500,
+                status: "completed",
+                bookingDate: "2023-12-01"
+            }
+        ];
+
+        // Mock cars data (এটি পরে ডাইনামিক করা যাবে)
+        const mockCars = [
+            {
+                id: 1,
+                name: "Toyota Allion 2020",
+                image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+                price: 3500,
+                type: "sedan",
+                transmission: "automatic",
+                fuel: "petrol",
+                seats: 5,
+                rating: 4.5,
+                reviews: 28,
+                status: "available"
+            },
+            {
+                id: 2,
+                name: "Honda Civic 2019",
+                image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+                price: 3000,
+                type: "sedan",
+                transmission: "automatic",
+                fuel: "petrol",
+                seats: 5,
+                rating: 4.3,
+                reviews: 15,
+                status: "rented"
+            }
+        ];
+
+        // Mock reviews data (এটি পরে ডাইনামিক করা যাবে)
+        const mockReviews = [
+            {
+                id: 1,
+                reviewerName: "Arif Khan",
+                reviewerAvatar: "https://randomuser.me/api/portraits/men/22.jpg",
+                rating: 5,
+                date: "2024-01-05",
+                content: "Excellent car, very clean and well maintained. The pickup process was smooth and the owner was very helpful. Would definitely book again!",
+                carName: "Toyota Allion 2020",
+                carImage: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&auto=format&fit=crop&w-100&q=80"
+            },
+            {
+                id: 2,
+                reviewerName: "Nusrat Jahan",
+                reviewerAvatar: "https://randomuser.me/api/portraits/women/44.jpg",
+                rating: 4,
+                date: "2023-12-20",
+                content: "Good experience overall. Car was clean and comfortable for family trip. The fuel efficiency was great.",
+                carName: "Honda Civic 2019",
+                carImage: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Profile page loaded');
+            
+            // Check if user is logged in
+            if (!isLoggedIn()) {
+                showNotification('Please login to view your profile', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html?redirect=profile.html';
+                }, 1500);
+                return;
+            }
+            
+            // Load header and footer
+            loadHeader();
+            loadFooter();
+            
+            // Load user profile (Dynamic)
+            loadUserProfile();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Load initial tab
+            loadTab('bookings');
+        });
+        
+        function isLoggedIn() {
+            // Updated to use the correct key from your login page
+            const user = localStorage.getItem('udrive_user');
+            return user !== null && user !== undefined;
+        }
+        
+        function loadHeader() {
+            const headerDiv = document.getElementById('header');
+            if (headerDiv) {
+                headerDiv.innerHTML = `
+                    <header>
+                        <div class="container">
+                            <nav class="navbar">
+                                <a href="index.html" class="logo">Udrive</a>
+                                <button class="mobile-menu-btn" id="profileMobileMenuBtn" aria-label="Toggle navigation">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <div class="nav-links" id="profileNavLinks">
+                                    <a href="search.html">Find Cars</a>
+                                    <a href="how-it-works.html">How it Works</a>
+                                    <a href="profile.html" class="active">Profile</a>
+                                    <a href="#" onclick="logout()">Logout</a>
+                                </div>
+                            </nav>
+                        </div>
+                    </header>
+                `;
+            }
+        }
+        
+        function loadFooter() {
+            const footerDiv = document.getElementById('footer');
+            if (footerDiv) {
+                footerDiv.innerHTML = `
+                    <footer>
+                        <div class="container">
+                            <p>&copy; 2024 Udrive. All rights reserved.</p>
+                        </div>
+                    </footer>
+                `;
+            }
+        }
+        
+        // 🚀 DYNAMIC PROFILE LOADING 🚀
+        async function loadUserProfile() {
+            const storedUser = localStorage.getItem('udrive_user');
+            if (!storedUser) return;
+            const authUser = JSON.parse(storedUser);
+
+            try {
+                // Fetch user data from Supabase 'profiles' table
+                const { data: profileData, error } = await window.supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', authUser.id)
+                    .single();
+
+                if (error && error.code !== 'PGRST116') {
+                    throw error;
+                }
+
+                const dbData = profileData || {};
+
+                // Use DB data or fallback to Auth metadata
+                const fullName = dbData.name || authUser.user_metadata?.name || 'Unknown User';
+                const email = authUser.email;
+                const phone = dbData.phone || authUser.user_metadata?.phone || '';
+                const address = dbData.address || '';
+                const license = dbData.license || '';
+                const avatar = dbData.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
+
+                // Update Profile Sidebar UI
+                document.getElementById('userName').textContent = fullName;
+                document.getElementById('userEmail').textContent = email;
+                document.getElementById('userAvatar').src = avatar;
+                
+                // Update stats
+                document.getElementById('totalBookings').textContent = mockBookings.length;
+                document.getElementById('totalCars').textContent = mockCars.length;
+                
+                // Update Form Fields
+                const nameParts = fullName.split(' ');
+                document.getElementById('firstName').value = nameParts || '';
+                document.getElementById('lastName').value = nameParts.slice(1).join(' ') || '';
+                document.getElementById('email').value = email;
+                document.getElementById('phone').value = phone;
+                document.getElementById('address').value = address;
+                document.getElementById('license').value = license;
+                document.getElementById('avatar').value = avatar;
+
+            } catch (err) {
+                console.error("Error loading profile:", err);
+                document.getElementById('userName').textContent = authUser.user_metadata?.name || 'User';
+                document.getElementById('userEmail').textContent = authUser.email;
+            }
+        }
+        
+        function setupEventListeners() {
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+
+            // Mobile menu toggle
+            document.getElementById('profileMobileMenuBtn')?.addEventListener('click', function() {
+                document.getElementById('profileNavLinks')?.classList.toggle('show');
+            });
+            
+            // Edit profile button
+            document.getElementById('editProfileBtn')?.addEventListener('click', function() {
+                switchTab('settings');
+            });
+            
+            // List car button
+            document.getElementById('listCarBtn')?.addEventListener('click', function() {
+                showNotification('Redirecting to car listing page...', 'info');
+                setTimeout(() => {
+                    window.location.href = 'add-car.html';
+                }, 1000);
+            });
+            
+            // Add car button
+            document.getElementById('addCarBtn')?.addEventListener('click', function() {
+                showNotification('Redirecting to car listing page...', 'info');
+                setTimeout(() => {
+                    window.location.href = 'add-car.html';
+                }, 1000);
+            });
+            
+            // Settings form submission
+            document.getElementById('settingsForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProfileChanges();
+            });
+            
+            // Cancel button
+            document.getElementById('cancelBtn')?.addEventListener('click', function() {
+                loadUserProfile(); // Reset form to original values
+                showNotification('Changes discarded', 'info');
+            });
+            
+            // Delete account button
+            document.getElementById('deleteAccountBtn')?.addEventListener('click', function() {
+                if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                    deleteAccount();
+                }
+            });
+        }
+        
+        function switchTab(tabId) {
+            // Update active tab button
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.classList.remove('active');
+                if (button.getAttribute('data-tab') === tabId) {
+                    button.classList.add('active');
+                }
+            });
+            
+            // Update active tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+            
+            // Load tab content
+            loadTab(tabId);
+        }
+        
+        function loadTab(tabId) {
+            switch(tabId) {
+                case 'bookings':
+                    loadBookings();
+                    break;
+                case 'cars':
+                    loadCars();
+                    break;
+                case 'reviews':
+                    loadReviews();
+                    break;
+                case 'settings':
+                    // Settings form is already loaded
+                    break;
+            }
+        }
+        
+        function loadBookings() {
+            const bookingsList = document.getElementById('bookingsList');
+            
+            if (mockBookings.length === 0) {
+                bookingsList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <h3>No Bookings Yet</h3>
+                        <p>You haven't made any bookings yet. Start exploring available cars!</p>
+                        <button class="btn btn-primary" onclick="window.location.href='search.html'">
+                            Browse Cars
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            bookingsList.innerHTML = mockBookings.map(booking => `
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <div class="booking-car">
+                            <div class="booking-car-image">
+                                <img src="${booking.carImage}" alt="${booking.carName}">
+                            </div>
+                            <div class="booking-car-info">
+                                <h4>${booking.carName}</h4>
+                                <p>Booking ID: UDRIVE-${booking.id.toString().padStart(6, '0')}</p>
+                            </div>
+                        </div>
+                        <span class="booking-status status-${booking.status}">
+                            ${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                        </span>
+                    </div>
+                    
+                    <div class="booking-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Pickup Date</span>
+                            <span class="detail-value">${formatDate(booking.pickupDate)}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Return Date</span>
+                            <span class="detail-value">${formatDate(booking.returnDate)}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Pickup Location</span>
+                            <span class="detail-value">${booking.pickupLocation}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total Price</span>
+                            <span class="detail-value">৳${booking.totalPrice.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="booking-actions">
+                        <button class="btn btn-outline btn-sm" onclick="viewBookingDetails(${booking.id})">
+                            <i class="fas fa-eye"></i> View Details
+                        </button>
+                        ${booking.status === 'pending' ? `
+                            <button class="btn btn-danger btn-sm" onclick="cancelBooking(${booking.id})">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        ` : ''}
+                        ${booking.status === 'completed' ? `
+                            <button class="btn btn-primary btn-sm" onclick="writeReview(${booking.carId})">
+                                <i class="fas fa-star"></i> Write Review
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function loadCars() {
+            const carsList = document.getElementById('carsList');
+            
+            if (mockCars.length === 0) {
+                carsList.innerHTML = `
+                    <div class="empty-state empty-state-full">
+                        <i class="fas fa-car"></i>
+                        <h3>No Cars Listed</h3>
+                        <p>You haven't listed any cars yet. Start earning by listing your car!</p>
+                        <button class="btn btn-primary" onclick="window.location.href='add-car.html'">
+                            <i class="fas fa-plus"></i> List Your Car
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            carsList.innerHTML = mockCars.map(car => `
+                <div class="car-item">
+                    <div class="car-item-image">
+                        <img src="${car.image}" alt="${car.name}">
+                    </div>
+                    <div class="car-item-info">
+                        <h4>${car.name}</h4>
+                        <p class="car-item-specs">${car.transmission} • ${car.fuel} • ${car.seats} Seats</p>
+                        <div class="car-item-price">৳${car.price}/day</div>
+                        <div class="car-item-specs">
+                            <i class="fas fa-star star-icon"></i>
+                            ${car.rating} (${car.reviews} reviews)
+                        </div>
+                        <div class="car-item-actions">
+                            <button class="btn btn-outline btn-sm" onclick="viewCarDetails(${car.id})">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="editCar(${car.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="manageCar(${car.id})">
+                                <i class="fas fa-cog"></i> Manage
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function loadReviews() {
+            const reviewsList = document.getElementById('reviewsList');
+            
+            if (mockReviews.length === 0) {
+                reviewsList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-star"></i>
+                        <h3>No Reviews Yet</h3>
+                        <p>You haven't received any reviews yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            reviewsList.innerHTML = mockReviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer">
+                            <div class="reviewer-avatar">
+                                <img src="${review.reviewerAvatar}" alt="${review.reviewerName}">
+                            </div>
+                            <div class="reviewer-info">
+                                <h5>${review.reviewerName}</h5>
+                                <div class="review-rating">
+                                    ${createStarsHTML(review.rating)}
+                                </div>
+                            </div>
+                        </div>
+                        <span class="review-date">${formatDate(review.date)}</span>
+                    </div>
+                    
+                    <div class="review-content">
+                        <p>${review.content}</p>
+                    </div>
+                    
+                    <div class="review-car">
+                        <i class="fas fa-car"></i>
+                        <span>${review.carName}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // 🚀 DYNAMIC PROFILE SAVING 🚀
+        async function saveProfileChanges() {
+            // Get form values
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const license = document.getElementById('license').value.trim();
+            const avatar = document.getElementById('avatar').value.trim();
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            const fullName = `${firstName} ${lastName}`.trim();
+            
+            // Basic validation
+            if (!firstName || !lastName || !email) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            try {
+                const storedUser = localStorage.getItem('udrive_user');
+                const authUser = JSON.parse(storedUser);
+
+                // Check password change
+                if (newPassword || confirmPassword) {
+                    if (newPassword !== confirmPassword) {
+                        showNotification('New passwords do not match', 'error');
+                        return;
+                    }
+                    if (newPassword.length < 6) {
+                        showNotification('New password must be at least 6 characters', 'error');
+                        return;
+                    }
+                    
+                    // Update Password in Supabase Auth
+                    const { error: pwError } = await window.supabaseClient.auth.updateUser({
+                        password: newPassword
+                    });
+                    
+                    if (pwError) throw pwError;
+
+                    // Clear password fields
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                    showNotification('Password updated successfully', 'success');
+                }
+
+                // Update Profile info in Supabase Database
+                const { error: dbError } = await window.supabaseClient
+                    .from('profiles')
+                    .update({
+                        name: fullName,
+                        phone: phone,
+                        address: address,
+                        license: license,
+                        avatar_url: avatar
+                    })
+                    .eq('id', authUser.id);
+
+                if (dbError) throw dbError;
+
+                showNotification('Profile updated successfully! ✅', 'success');
+                
+                // Refresh UI with new data
+                loadUserProfile();
+
+            } catch (err) {
+                console.error("Error saving profile:", err);
+                showNotification('Error updating profile: ' + err.message, 'error');
+            }
+        }
+        
+        function deleteAccount() {
+            showNotification('Account deletion process not implemented yet.', 'info');
+        }
+        
+        function viewBookingDetails(bookingId) {
+            const booking = mockBookings.find(b => b.id === bookingId);
+            if (booking) {
+                showNotification(`Viewing booking details for ${booking.carName}`, 'info');
+                console.log('Booking details:', booking);
+            }
+        }
+        
+        function cancelBooking(bookingId) {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                showNotification('Booking cancelled successfully', 'success');
+                
+                const bookingElement = document.querySelector(`[onclick="cancelBooking(${bookingId})"]`)?.closest('.booking-card');
+                if (bookingElement) {
+                    const statusElement = bookingElement.querySelector('.booking-status');
+                    statusElement.textContent = 'Cancelled';
+                    statusElement.className = 'booking-status status-cancelled';
+                    
+                    const cancelButton = bookingElement.querySelector('[onclick^="cancelBooking"]');
+                    if (cancelButton) {
+                        cancelButton.closest('button').remove();
+                    }
+                }
+            }
+        }
+        
+        function writeReview(carId) {
+            const car = mockCars.find(c => c.id === carId);
+            if (car) {
+                showNotification(`Writing review for ${car.name}`, 'info');
+                const reviewText = prompt(`Write your review for ${car.name}:`);
+                if (reviewText) {
+                    const rating = prompt('Rate from 1 to 5 stars:');
+                    if (rating && rating >= 1 && rating <= 5) {
+                        showNotification('Review submitted successfully', 'success');
+                    }
+                }
+            }
+        }
+        
+        function viewCarDetails(carId) {
+            localStorage.setItem('selectedCarId', carId);
+            window.location.href = `car-details.html?id=${carId}`;
+        }
+        
+        function editCar(carId) {
+            const car = mockCars.find(c => c.id === carId);
+            if (car) {
+                showNotification(`Editing ${car.name}`, 'info');
+                setTimeout(() => {
+                    window.location.href = `edit-car.html?id=${carId}`;
+                }, 500);
+            }
+        }
+        
+        function manageCar(carId) {
+            const car = mockCars.find(c => c.id === carId);
+            if (car) {
+                showNotification(`Managing ${car.name}`, 'info');
+            }
+        }
+        
+        function createStarsHTML(rating) {
+            let starsHTML = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += '<i class="fas fa-star"></i>';
+            }
+            if (hasHalfStar) {
+                starsHTML += '<i class="fas fa-star-half-alt"></i>';
+            }
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                starsHTML += '<i class="far fa-star"></i>';
+            }
+            return starsHTML;
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+        
+        // 🚀 DYNAMIC LOGOUT 🚀
+        async function logout() {
+            try {
+                if (window.supabaseClient) {
+                    await window.supabaseClient.auth.signOut();
+                }
+            } catch (err) {
+                console.error("Logout Error:", err);
+            }
+            
+            localStorage.removeItem('udrive_user');
+            localStorage.removeItem('udrive_token');
+            
+            showNotification('Logged out successfully', 'success');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+        
+        function showNotification(message, type = 'info') {
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => {
+                notification.remove();
+            });
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+            
+            notification.innerHTML = `
+                <i class="fas fa-${icon}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Load your config SECOND -->
+    <script src="js/supabase-config.js"></script>
+    
+    <!-- 3. Load utils THIRD -->
+    <script src="js/utils.js"></script>
+    
+    <!-- 4. Load page-specific script LAST -->
+    <script src="js/auth.js"></script>
+</body>
+</html>

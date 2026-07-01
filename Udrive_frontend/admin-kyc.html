@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage KYC - Udrive Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="adminHeader"></div>
+
+    <div class="admin-dashboard">
+        <div class="container">
+            <div class="admin-layout">
+                <aside class="admin-sidebar">
+                    <div class="admin-profile">
+                        <div class="admin-avatar"><i class="fas fa-user-shield"></i></div>
+                        <h3>Admin Panel</h3>
+                        <p>System Administrator</p>
+                    </div>
+                    <nav class="admin-nav">
+                        <a href="admin-dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+                        <a href="admin-kyc.html" class="nav-item active"><i class="fas fa-user-check"></i> <span>KYC Requests</span></a>
+                        <a href="dashboard.html" class="nav-item"><i class="fas fa-sign-out-alt"></i> <span>Exit Admin</span></a>
+                    </nav>
+                </aside>
+
+                <main class="admin-content">
+                    <div class="section-header">
+                        <h2>Pending KYC Requests</h2>
+                        <button class="btn btn-outline btn-sm" onclick="loadPendingKYC()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    </div>
+
+                    <div id="kycDocumentsList" class="kyc-grid-list">
+                        <div style="text-align:center; padding: 20px;">Loading...</div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/utils.js"></script>
+    
+    <script src="js/admin.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load Header
+            const header = document.getElementById('adminHeader');
+            if(header) {
+                header.innerHTML = `<header class="admin-header"><div class="container"><nav class="navbar"><a href="admin-dashboard.html" class="logo">Udrive Admin</a></nav></div></header>`;
+            }
+            // Load Data
+            loadPendingKYC();
+        });
+    </script>
+
+    <style>
+        /* Simple Card Style for KYC Items */
+        .kyc-grid-list { display: grid; gap: 20px; }
+        .kyc-item { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .kyc-user h4 { margin: 0 0 5px 0; color: #1e293b; }
+        .kyc-user p { margin: 0; color: #64748b; font-size: 0.9rem; }
+        .kyc-actions { display: flex; gap: 10px; }
+    </style>
+</body>
+</html>

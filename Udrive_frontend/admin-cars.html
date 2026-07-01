@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Cars - Udrive Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .car-table img { width: 70px; height: 50px; object-fit: cover; border-radius: 6px; }
+        .status-badge { padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-approved { background: #d4edda; color: #155724; }
+        .status-rejected { background: #f8d7da; color: #721c24; }
+        .action-btn { margin-right: 5px; border: none; padding: 6px 10px; border-radius: 5px; cursor: pointer; color: white; font-size: 0.8rem; }
+        .btn-approve { background-color: #28a745; }
+        .btn-reject { background-color: #dc3545; }
+        .btn-delete { background-color: #6c757d; }
+        .btn-docs { background-color: #2563eb; }
+
+        /* Modal Style */
+        .doc-modal-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75);
+            z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .doc-modal-box {
+            background: white; border-radius: 14px;
+            padding: 30px; width: 92%; max-width: 820px;
+            max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .doc-modal-header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 20px;
+            padding-bottom: 15px; border-bottom: 1px solid #e2e8f0;
+        }
+        .doc-modal-header h3 { margin: 0; color: #1e293b; font-size: 1.2rem; }
+        .doc-modal-close {
+            background: #f1f5f9; border: none; border-radius: 50%;
+            width: 36px; height: 36px; font-size: 1.1rem;
+            cursor: pointer; color: #64748b;
+        }
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .doc-item { text-align: center; }
+        .doc-item p {
+            font-weight: 600; margin-bottom: 10px;
+            color: #374151; font-size: 0.9rem;
+        }
+        .doc-item img {
+            width: 100%; max-width: 240px; height: 160px;
+            object-fit: cover; border-radius: 8px;
+            border: 1px solid #cbd5e1; cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .doc-item img:hover { opacity: 0.85; }
+        .doc-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 20px; background: #2563eb;
+            color: white; border-radius: 8px;
+            text-decoration: none; font-weight: 500; font-size: 0.9rem;
+        }
+        .doc-empty {
+            grid-column: 1/-1; text-align: center;
+            color: #ef4444; padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="adminHeader"></div>
+
+    <div class="admin-dashboard">
+        <div class="container">
+            <div class="admin-layout">
+                <aside class="admin-sidebar">
+                    <div class="admin-profile">
+                        <div class="admin-avatar"><i class="fas fa-user-shield"></i></div>
+                        <h3>Admin Panel</h3>
+                        <p>System Administrator</p>
+                    </div>
+                    <nav class="admin-nav">
+                        <a href="admin-dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+                        <a href="admin-kyc.html" class="nav-item"><i class="fas fa-user-check"></i> <span>KYC Requests</span></a>
+                        <a href="admin-cars.html" class="nav-item active"><i class="fas fa-car"></i> <span>Manage Cars</span></a>
+                        <a href="dashboard.html" class="nav-item"><i class="fas fa-sign-out-alt"></i> <span>Exit Admin</span></a>
+                    </nav>
+                </aside>
+
+                <main class="admin-content">
+                    <div class="section-header">
+                        <h2>Manage Car Listings</h2>
+                        <button class="btn btn-outline btn-sm" onclick="loadAdminCars()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Car Details</th>
+                                    <th>Price/Day</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="carTableBody">
+                                <tr><td colspan="5" style="text-align:center;">Loading cars...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Modal -->
+    <div id="carDocModal" class="doc-modal-overlay" style="display:none;">
+        <div class="doc-modal-box">
+            <div class="doc-modal-header">
+                <h3 id="docModalTitle">🚗 Car Documents</h3>
+                <button class="doc-modal-close" onclick="closeDocModal()">✕</button>
+            </div>
+            <div class="doc-grid" id="docModalContent"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadAdminCars();
+        });
+
+        function loadHeader() {
+            const header = document.getElementById('adminHeader');
+            if (header) {
+                header.innerHTML = `<header class="admin-header"><div class="container"><nav class="navbar"><a href="admin-dashboard.html" class="logo">Udrive Admin</a></nav></div></header>`;
+            }
+        }
+
+        // ✅ 1. Cars Load
+        async function loadAdminCars() {
+            const tbody = document.getElementById('carTableBody');
+            if (!tbody) return;
+
+            try {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Fetching data...</td></tr>';
+
+                const { data: cars, error } = await window.supabaseClient
+                    .from('cars')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!cars || cars.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No cars found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = cars.map(car => {
+                    // ✅ Image সঠিকভাবে নেওয়া
+                    let imgSrc = 'https://via.placeholder.com/70x50';
+                    if (car.image_url) {
+                        imgSrc = car.image_url;
+                    } else if (car.images && Array.isArray(car.images) && car.images.length > 0) {
+                        imgSrc = car.images[0].data || car.images[0];
+                    }
+
+                    // ✅ Reg number description থেকে বের করা
+                    const regMatch = car.description?.match(/Reg: ([^)]+)/);
+                    const regNumber = regMatch ? regMatch[1].trim() : 'N/A';
+
+                    const statusClass = `status-${(car.status || 'pending').toLowerCase()}`;
+
+                    return `
+                        <tr id="car-row-${car.id}">
+                            <td class="car-table">
+                                <img src="${imgSrc}" alt="Car">
+                            </td>
+                            <td>
+                                <strong>${car.make || ''} ${car.model || ''}</strong> (${car.year || 'N/A'})<br>
+                                <small style="color:#666;">Reg: ${regNumber}</small><br>
+                                <small style="color:#666;">${car.location || 'N/A'}</small>
+                            </td>
+                            <td>৳${car.daily_rate || 0}</td>
+                            <td>
+                                <span class="status-badge ${statusClass}">${car.status || 'pending'}</span>
+                            </td>
+                            <td>
+                                <!-- ✅ Documents Button -->
+                                <button class="action-btn btn-docs" onclick="viewCarDocuments('${car.id}', '${(car.make || '') + ' ' + (car.model || '')}')" title="View Documents">
+                                    <i class="fas fa-file-alt"></i> Docs
+                                </button>
+
+                                ${car.status === 'pending' ? `
+                                    <button class="action-btn btn-approve" onclick="updateCarStatus('${car.id}', 'approved')" title="Approve">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="action-btn btn-reject" onclick="updateCarStatus('${car.id}', 'rejected')" title="Reject">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                ` : ''}
+
+                                <button class="action-btn btn-delete" onclick="deleteCar('${car.id}')" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>`;
+                }).join('');
+
+            } catch (err) {
+                console.error('Error:', err);
+                tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Error: ${err.message}</td></tr>`;
+            }
+        }
+
+        // ✅ 2. View Documents Modal
+        async function viewCarDocuments(carId, carName) {
+            try {
+                document.getElementById('docModalTitle').textContent = `🚗 ${carName} - Documents`;
+                document.getElementById('docModalContent').innerHTML = '<p style="text-align:center;">Loading...</p>';
+                document.getElementById('carDocModal').style.display = 'flex';
+
+                const { data: doc, error } = await window.supabaseClient
+                    .from('car_documents')
+                    .select('*')
+                    .eq('car_id', carId)
+                    .single();
+
+                if (error || !doc) {
+                    document.getElementById('docModalContent').innerHTML = '<p class="doc-empty">কোনো document আপলোড হয়নি!</p>';
+                    return;
+                }
+
+                const documents = [
+                    { label: '📋 Registration Certificate', url: doc.registration_url },
+                    { label: '🏥 Fitness Certificate', url: doc.fitness_url },
+                    { label: '🪙 Tax Token', url: doc.tax_token_url },
+                    { label: '🛡️ Insurance Papers', url: doc.insurance_url },
+                ].filter(d => d.url);
+
+                if (documents.length === 0) {
+                    document.getElementById('docModalContent').innerHTML = '<p class="doc-empty">কোনো document পাওয়া যায়নি!</p>';
+                    return;
+                }
+
+                document.getElementById('docModalContent').innerHTML = documents.map(d => {
+                    const isImage = d.url.match(/\.(jpg|jpeg|png|gif|webp)/i);
+                    return `
+                        <div class="doc-item">
+                            <p>${d.label}</p>
+                            ${isImage
+                                ? `<a href="${d.url}" target="_blank">
+                                       <img src="${d.url}" alt="${d.label}">
+                                   </a>`
+                                : `<a href="${d.url}" target="_blank" class="doc-link">
+                                       <i class="fas fa-file-pdf"></i> View / Download
+                                   </a>`
+                            }
+                        </div>`;
+                }).join('');
+
+            } catch (err) {
+                document.getElementById('docModalContent').innerHTML = `<p class="doc-empty">Error: ${err.message}</p>`;
+            }
+        }
+
+        function closeDocModal() {
+            document.getElementById('carDocModal').style.display = 'none';
+        }
+
+        // Modal background click এ close
+        document.getElementById('carDocModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDocModal();
+        });
+
+        // ✅ 3. Approve / Reject
+        async function updateCarStatus(carId, newStatus) {
+            if (!confirm(`এই গাড়িটি ${newStatus.toUpperCase()} করবেন?`)) return;
+            try {
+                const { error } = await window.supabaseClient
+                    .from('cars')
+                    .update({ status: newStatus })
+                    .eq('id', carId);
+
+                if (error) throw error;
+                alert(`✅ Car ${newStatus} successfully!`);
+                loadAdminCars();
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+        // ✅ 4. Delete Car
+        async function deleteCar(carId) {
+            if (!confirm('এই car listing স্থায়ীভাবে delete করবেন?')) return;
+            try {
+                // car_documents ও delete করুন
+                await window.supabaseClient
+                    .from('car_documents')
+                    .delete()
+                    .eq('car_id', carId);
+
+                const { error } = await window.supabaseClient
+                    .from('cars')
+                    .delete()
+                    .eq('id', carId);
+
+                if (error) throw error;
+                alert('Car deleted.');
+                loadAdminCars();
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+    </script>
+</body>
+</html>

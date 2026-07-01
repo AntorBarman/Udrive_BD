@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Reservation - Udrive</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0f766e;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #374151;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a.logout {
+            color: #ef4444;
+        }
+
+        /* Page Layout */
+        .reservation-page {
+            padding: 35px 0 60px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            font-size: 1.8rem;
+            color: #1e293b;
+        }
+
+        .page-title p {
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+            max-width: 160px;
+        }
+
+        .step-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 60%;
+            width: 80%;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+
+        .step-item.completed:not(:last-child)::after {
+            background: #10b981;
+        }
+
+        .step-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            z-index: 1;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .step-item.active .step-circle {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        }
+
+        .step-item.completed .step-circle {
+            background: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            margin-top: 8px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .step-item.active .step-label {
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        .step-item.completed .step-label {
+            color: #10b981;
+        }
+
+        /* Main Layout */
+        .reservation-layout {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 25px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .reservation-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Step Cards */
+        .reservation-step {
+            display: none;
+            animation: fadeUp 0.35s ease;
+        }
+
+        .reservation-step.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .step-card-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .step-card-header h2 {
+            font-size: 1.2rem;
+            color: #1e293b;
+        }
+
+        .step-card-header .step-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-card-header .step-icon i {
+            color: #2563eb;
+            font-size: 1rem;
+        }
+
+        .step-card-body {
+            padding: 25px;
+        }
+
+        /* Car Summary */
+        .car-summary {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            padding: 18px;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .car-summary img {
+            width: 120px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .car-summary-info h3 {
+            font-size: 1.05rem;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+
+        .car-specs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .car-specs span {
+            font-size: 0.82rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Trip Dates */
+        .trip-dates {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .trip-dates {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .date-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .date-box label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .date-box p {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Form */
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .form-section h4 {
+            font-size: 1rem;
+            color: #475569;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #475569;
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Add-ons */
+        .addons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .addons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .addon-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .addon-card:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .addon-card.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .addon-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 22px;
+            height: 22px;
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: grid;
+            place-items: center;
+        }
+
+        .addon-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .addon-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+
+        .addon-desc {
+            font-size: 0.78rem;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        .addon-price {
+            font-weight: 700;
+            color: #2563eb;
+            font-size: 0.9rem;
+        }
+
+        /* Review Summary */
+        .review-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .review-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .review-item-label {
+            color: #64748b;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .review-item-label i {
+            color: #2563eb;
+            width: 16px;
+        }
+
+        .review-item-value {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+
+        .review-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: #1e293b;
+            border-radius: 10px;
+            color: white;
+            margin-top: 5px;
+        }
+
+        .review-total span:first-child {
+            font-size: 1rem;
+        }
+
+        .review-total .total-amount {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        /* Payment Step */
+        .payment-gateway-box {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+            border: 2px solid #10b981;
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+
+        .payment-gateway-box .gateway-icon {
+            font-size: 2.8rem;
+            color: #10b981;
+            margin-bottom: 12px;
+        }
+
+        .payment-gateway-box h3 {
+            color: #065f46;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+        }
+
+        .payment-gateway-box p {
+            color: #047857;
+            font-size: 0.88rem;
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .payment-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            background: white;
+            border: 1px solid #d1fae5;
+            color: #065f46;
+        }
+
+        .amount-to-pay {
+            text-align: center;
+            padding: 14px;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .amount-to-pay p {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .amount-to-pay .pay-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* Step Actions */
+        .step-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .step-actions .btn {
+            flex: 1;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 13px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+            transition: all 0.25s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+
+        .btn-outline:hover {
+            background: #eff6ff;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Order Summary Sidebar */
+        .order-sidebar {
+            position: sticky;
+            top: 90px;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+            overflow: hidden;
+        }
+
+        .order-card-header {
+            padding: 18px 20px;
+            background: #1e293b;
+        }
+
+        .order-card-header h3 {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .order-card-body {
+            padding: 20px;
+        }
+
+        .order-car-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 14px;
+        }
+
+        .order-car-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .order-price-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .order-price-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .order-price-item span:first-child {
+            color: #64748b;
+        }
+
+        .order-price-item span:last-child {
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .order-divider {
+            height: 1px;
+            background: #f1f5f9;
+            margin: 12px 0;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .order-total span:last-child {
+            color: #2563eb;
+            font-size: 1.1rem;
+        }
+
+        .order-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #f0fdf4;
+            color: #065f46;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-top: 14px;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeUp 0.5s ease;
+        }
+
+        .success-card {
+            background: white;
+            border-radius: 16px;
+            padding: 50px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #10b981;
+            margin-bottom: 15px;
+        }
+
+        .success-card h2 {
+            font-size: 1.6rem;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .success-card p {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .booking-ref {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .booking-ref p {
+            font-size: 0.9rem;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .booking-ref strong {
+            color: #1e293b;
+        }
+
+        /* Footer */
+        footer {
+            background: #1e293b;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+
+        /* Validation error */
+        .field-error {
+            border-color: #ef4444 !important;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 0.78rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <div class="reservation-page">
+        <div class="container">
+
+            <!-- Page Title -->
+            <div class="page-title">
+                <h1><i class="fas fa-car" style="color:#2563eb;"></i> Complete Your Reservation</h1>
+                <p>Just a few steps to confirm your booking</p>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step-item active" id="indicator1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Trip Details</div>
+                </div>
+                <div class="step-item" id="indicator2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Add-ons</div>
+                </div>
+                <div class="step-item" id="indicator3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Review</div>
+                </div>
+                <div class="step-item" id="indicator4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+
+            <!-- Main Layout -->
+            <div class="reservation-layout">
+
+                <!-- Left: Steps -->
+                <div>
+
+                    <!-- ===== STEP 1: Trip Details ===== -->
+                    <div class="reservation-step active" id="step1">
+                        <div class="step-card">
+                            <div class="step-card-header">
+                                <div class="step-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <h2>Trip Details</h2>
+                            </div>
+                            <div class="step-card-body">
+
+                                <!-- Car Summary -->
+                                <div class="car-summary">
+                                    <img id="bookingCarImage"
+                                        src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400" alt="Car"
+                                        onerror="this.src='https://via.placeholder.com/120x80'">
+                                    <div class="car-summary-info">
+                                        <h3 id="bookingCarName">Loading...</h3>
+                                        <div class="car-specs">
+                                            <span><i class="fas fa-user-friends"></i> <span id="carSeats">5</span>
+                                                Seats</span>
+                                            <span><i class="fas fa-cog"></i> <span
+                                                    id="carTransmission">Auto</span></span>
+                                            <span><i class="fas fa-map-marker-alt"></i> <span
+                                                    id="carLocation">Dhaka</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Trip Dates -->
+                                <div class="trip-dates">
+                                    <div class="date-box">
+                                        <label><i class="fas fa-calendar-check"></i> Pickup</label>
+                                        <p id="bookingPickupDate">—</p>
+                                    </div>
+                                    <div class="date-box">
+                                        <label><i class="fas fa-calendar-times"></i> Return</label>
+                                        <p id="bookingReturnDate">—</p>
+                                    </div>
+                                    <div class="date-box">
+                                        <label><i class="fas fa-clock"></i> Duration</label>
+                                        <p id="bookingDuration">—</p>
+                                    </div>
+                                </div>
+
+                                <!-- Driver Info -->
+                                <div class="form-section">
+                                    <h4><i class="fas fa-user" style="color:#2563eb; margin-right:6px;"></i>Driver
+                                        Information</h4>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Full Name *</label>
+                                            <input type="text" id="driverName" placeholder="Your full name">
+                                            <p class="error-msg" id="nameError">Name is required</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Phone Number *</label>
+                                            <input type="tel" id="driverPhone" placeholder="01XXXXXXXXX">
+                                            <p class="error-msg" id="phoneError">Valid phone number required</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Special Requests (Optional)</label>
+                                        <textarea id="specialRequests"
+                                            placeholder="Any special requirements..."></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="step-actions">
+                            <button class="btn btn-primary" onclick="goToStep(2)">
+                                Continue <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ===== STEP 2: Add-ons ===== -->
+                    <div class="reservation-step" id="step2">
+                        <div class="step-card">
+                            <div class="step-card-header">
+                                <div class="step-icon"><i class="fas fa-plus-circle"></i></div>
+                                <h2>Extra Services</h2>
+                            </div>
+                            <div class="step-card-body">
+                                <p style="color:#64748b; margin-bottom:18px; font-size:0.9rem;">
+                                    Select optional services to enhance your trip (you can skip this step).
+                                </p>
+                                <div class="addons-grid" id="addonsGrid">
+                                    <div class="addon-card" onclick="toggleAddon(this, 500, 'Additional Driver')">
+                                        <div class="addon-icon">👤</div>
+                                        <div class="addon-name">Additional Driver</div>
+                                        <div class="addon-desc">Add a second authorized driver</div>
+                                        <div class="addon-price">+৳500</div>
+                                    </div>
+                                    <div class="addon-card" onclick="toggleAddon(this, 300, 'Child Seat')">
+                                        <div class="addon-icon">🪑</div>
+                                        <div class="addon-name">Child Seat</div>
+                                        <div class="addon-desc">Safety seat for children</div>
+                                        <div class="addon-price">+৳300</div>
+                                    </div>
+                                    <div class="addon-card" onclick="toggleAddon(this, 800, 'GPS Navigation')">
+                                        <div class="addon-icon">🗺️</div>
+                                        <div class="addon-name">GPS Navigation</div>
+                                        <div class="addon-desc">Premium navigation device</div>
+                                        <div class="addon-price">+৳800</div>
+                                    </div>
+                                    <div class="addon-card" onclick="toggleAddon(this, 1200, 'Personal Driver')">
+                                        <div class="addon-icon">🧑‍✈️</div>
+                                        <div class="addon-name">Personal Driver</div>
+                                        <div class="addon-desc">Professional driver included</div>
+                                        <div class="addon-price">+৳1,200</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-actions">
+                            <button class="btn btn-outline" onclick="goToStep(1)">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button class="btn btn-primary" onclick="goToStep(3)">
+                                Continue <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ===== STEP 3: Review ===== -->
+                    <div class="reservation-step" id="step3">
+                        <div class="step-card">
+                            <div class="step-card-header">
+                                <div class="step-icon"><i class="fas fa-clipboard-check"></i></div>
+                                <h2>Review Booking</h2>
+                            </div>
+                            <div class="step-card-body">
+                                <div class="review-grid" id="reviewGrid">
+                                    <!-- Dynamically filled -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-actions">
+                            <button class="btn btn-outline" onclick="goToStep(2)">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button class="btn btn-primary" onclick="goToStep(4)">
+                                Proceed to Payment <i class="fas fa-credit-card"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ===== STEP 4: Payment ===== -->
+                    <div class="reservation-step" id="step4">
+                        <div class="step-card">
+                            <div class="step-card-header">
+                                <div class="step-icon"><i class="fas fa-lock"></i></div>
+                                <h2>Secure Payment</h2>
+                            </div>
+                            <div class="step-card-body">
+
+                                <div class="amount-to-pay">
+                                    <p>Total Amount to Pay</p>
+                                    <div class="pay-amount" id="payableAmount">৳0</div>
+                                </div>
+
+                                <div class="payment-gateway-box">
+                                    <div class="gateway-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <h3>Pay Securely with SSLCommerz</h3>
+                                    <p>Your payment is protected with 256-bit SSL encryption</p>
+                                    <div class="payment-methods">
+                                        <span class="payment-badge"><i class="fas fa-mobile-alt"></i> bKash</span>
+                                        <span class="payment-badge"><i class="fas fa-wallet"></i> Nagad</span>
+                                        <span class="payment-badge"><i class="fas fa-credit-card"></i> Card</span>
+                                        <span class="payment-badge"><i class="fas fa-university"></i> Bank</span>
+                                    </div>
+                                </div>
+
+                                <!-- Terms -->
+                                <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:5px;">
+                                    <input type="checkbox" id="agreeTerms"
+                                        style="margin-top:3px; accent-color:#2563eb;">
+                                    <label for="agreeTerms" style="color:#64748b; font-size:0.85rem; cursor:pointer;">
+                                        I agree to the
+                                        <a href="terms.html" style="color:#2563eb;">Terms & Conditions</a>
+                                        and
+                                        <a href="privacy.html" style="color:#2563eb;">Privacy Policy</a>
+                                    </label>
+                                </div>
+                                <p class="error-msg" id="termsError" style="margin-bottom:10px;">Please agree to
+                                    continue</p>
+
+                            </div>
+                        </div>
+                        <div class="step-actions">
+                            <button class="btn btn-outline" onclick="goToStep(3)">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button class="btn btn-success" id="confirmBtn" onclick="completeBooking()">
+                                <i class="fas fa-lock"></i> Pay Now
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right: Order Summary Sidebar -->
+                <div class="order-sidebar" id="orderSidebar">
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <h3><i class="fas fa-receipt" style="margin-right:8px;"></i>Order Summary</h3>
+                        </div>
+                        <div class="order-card-body">
+                            <img id="sidebarCarImage"
+                                src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400" alt="Car"
+                                class="order-car-image" onerror="this.src='https://via.placeholder.com/360x140'">
+                            <div class="order-car-name" id="sidebarCarName">Loading...</div>
+                            <div class="order-price-list">
+                                <div class="order-price-item">
+                                    <span>Hourly Rate</span>
+                                    <span id="sidebarHourlyRate">৳0/hr</span>
+                                </div>
+                                <div class="order-price-item">
+                                    <span>Duration</span>
+                                    <span id="sidebarDuration">—</span>
+                                </div>
+                                <div class="order-price-item">
+                                    <span>Rental Cost</span>
+                                    <span id="sidebarRentalCost">৳0</span>
+                                </div>
+                                <div class="order-price-item">
+                                    <span>Service Fee</span>
+                                    <span id="sidebarServiceFee">৳300</span>
+                                </div>
+                                <div class="order-price-item">
+                                    <span>Insurance</span>
+                                    <span id="sidebarInsurance">৳500</span>
+                                </div>
+                                <div class="order-price-item" id="addonSummaryRow" style="display:none;">
+                                    <span>Add-ons</span>
+                                    <span id="sidebarAddons">৳0</span>
+                                </div>
+                                <div class="order-divider"></div>
+                                <div class="order-total">
+                                    <span>Total</span>
+                                    <span id="sidebarTotal">৳0</span>
+                                </div>
+                            </div>
+                            <div class="order-badge">
+                                <i class="fas fa-shield-alt"></i> Secure Booking
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Success Message (shown after payment redirect back) -->
+            <div class="success-message" id="successMessage">
+                <div class="success-card">
+                    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                    <h2>Booking Confirmed!</h2>
+                    <p>Your booking has been saved successfully. You will receive a confirmation shortly.</p>
+                    <div class="booking-ref">
+                        <p><strong>Booking ID:</strong> <span id="savedBookingId">—</span></p>
+                        <p><strong>Car:</strong> <span id="savedCarName">—</span></p>
+                        <p><strong>Status:</strong> <span style="color:#10b981; font-weight:600;">Confirmed ✓</span></p>
+                    </div>
+                    <a href="bookings.html" class="btn btn-primary">
+                        <i class="fas fa-list"></i> View My Bookings
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+
+    <script>
+        // ============================================================
+        // reservation.html — Fully Dynamic, কোনো Static Data নেই
+        // ============================================================
+
+        // Global state
+        let bookingData = {};   // sessionStorage থেকে আসা booking info
+        let addonTotal = 0;    // selected add-ons এর মোট দাম
+        let baseTotal = 0;    // rental + service + insurance
+
+        const SERVICE_FEE = 300;
+        const INSURANCE = 500;
+
+        // ============================================================
+        // ১. Page Load
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function () {
+            loadHeader();
+            loadFooter();
+            loadBookingData();
+            checkPaymentReturn();
+        });
+
+        // ============================================================
+        // ২. sessionStorage থেকে Booking Data লোড করা
+        // ============================================================
+        function loadBookingData() {
+            const saved = sessionStorage.getItem('currentBooking');
+
+            if (!saved) {
+                alert("❌ Booking data not found! Please select a car first.");
+                window.location.href = 'search.html';
+                return;
+            }
+
+            bookingData = JSON.parse(saved);
+
+            // Car name
+            setText('bookingCarName', bookingData.carName || 'Car');
+            setText('sidebarCarName', bookingData.carName || 'Car');
+
+            // Car image
+            const imgUrl = getCarImage(bookingData);
+            setImg('bookingCarImage', imgUrl);
+            setImg('sidebarCarImage', imgUrl);
+
+            // Dates
+            setText('bookingPickupDate', formatDateTime(bookingData.pickupDate));
+            setText('bookingReturnDate', formatDateTime(bookingData.returnDate));
+            setText('bookingLocation', bookingData.pickupLocation || 'Dhaka');
+
+            // Duration
+            const hours = bookingData.hours || calculateHours(bookingData.pickupDate, bookingData.returnDate);
+            setText('bookingDuration', hours > 24
+                ? `${Math.floor(hours / 24)} day(s) ${hours % 24}hr`
+                : `${hours} Hours`
+            );
+
+            // Car specs (if available)
+            if (bookingData.carDetails) {
+                const d = bookingData.carDetails;
+                if (d.seats) setText('carSeats', d.seats);
+                if (d.transmission) setText('carTransmission', d.transmission);
+            }
+            setText('carLocation', bookingData.pickupLocation || 'Dhaka');
+
+            // Price calculation
+            const hourlyRate = bookingData.hourlyRate || Math.round((bookingData.totalPrice - SERVICE_FEE - INSURANCE) / hours);
+            const rentalCost = hourlyRate * hours;
+            baseTotal = rentalCost + SERVICE_FEE + INSURANCE;
+
+            // Sidebar price details
+            setText('sidebarHourlyRate', `৳${hourlyRate}/hr`);
+            setText('sidebarDuration', hours > 24 ? `${Math.floor(hours / 24)}d ${hours % 24}h` : `${hours} hrs`);
+            setText('sidebarRentalCost', `৳${rentalCost.toLocaleString()}`);
+            setText('sidebarServiceFee', `৳${SERVICE_FEE}`);
+            setText('sidebarInsurance', `৳${INSURANCE}`);
+            updateSidebarTotal();
+
+            // Pre-fill driver name from user
+            try {
+                const userStr = localStorage.getItem('udrive_user');
+                if (userStr) {
+                    const user = JSON.parse(userStr);
+                    const nameInput = document.getElementById('driverName');
+                    if (nameInput && !nameInput.value) {
+                        nameInput.value = user.user_metadata?.name || user.user_metadata?.full_name || '';
+                    }
+                }
+            } catch (e) { }
+        }
+
+        // ============================================================
+        // ৩. Add-on Toggle
+        // ============================================================
+        function toggleAddon(card, price, name) {
+            card.classList.toggle('selected');
+            if (card.classList.contains('selected')) {
+                addonTotal += price;
+            } else {
+                addonTotal -= price;
+            }
+            if (addonTotal < 0) addonTotal = 0;
+
+            // Sidebar update
+            const addonRow = document.getElementById('addonSummaryRow');
+            if (addonTotal > 0) {
+                addonRow.style.display = 'flex';
+                setText('sidebarAddons', `৳${addonTotal.toLocaleString()}`);
+            } else {
+                addonRow.style.display = 'none';
+            }
+            updateSidebarTotal();
+        }
+
+        function updateSidebarTotal() {
+            const total = baseTotal + addonTotal;
+            setText('sidebarTotal', `৳${total.toLocaleString()}`);
+            setText('payableAmount', `৳${total.toLocaleString()}`);
+            setText('finalPrice', `৳${total.toLocaleString()}`);
+        }
+
+        // ============================================================
+        // ৪. Step Navigation
+        // ============================================================
+        function goToStep(step) {
+            // Step 1 থেকে যাওয়ার সময় validation
+            if (step === 2) {
+                if (!validateStep1()) return;
+            }
+
+            // Step 4 এ গেলে review grid পূরণ করো
+            if (step === 3) buildReviewGrid();
+
+            // সব step লুকাও
+            document.querySelectorAll('.reservation-step').forEach(el => el.classList.remove('active'));
+
+            // নির্দিষ্ট step দেখাও
+            const target = document.getElementById('step' + step);
+            if (target) target.classList.add('active');
+
+            // Progress indicators আপডেট
+            for (let i = 1; i <= 4; i++) {
+                const ind = document.getElementById('indicator' + i);
+                if (!ind) continue;
+                ind.classList.remove('active', 'completed');
+                if (i < step) ind.classList.add('completed');
+                else if (i === step) ind.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================================
+        // ৫. Step 1 Validation
+        // ============================================================
+        function validateStep1() {
+            const name = document.getElementById('driverName')?.value?.trim();
+            const phone = document.getElementById('driverPhone')?.value?.trim();
+            let valid = true;
+
+            const nameErr = document.getElementById('nameError');
+            const phoneErr = document.getElementById('phoneError');
+            const nameIn = document.getElementById('driverName');
+            const phoneIn = document.getElementById('driverPhone');
+
+            // Reset
+            nameErr.classList.remove('show');
+            phoneErr.classList.remove('show');
+            nameIn.classList.remove('field-error');
+            phoneIn.classList.remove('field-error');
+
+            if (!name) {
+                nameErr.classList.add('show');
+                nameIn.classList.add('field-error');
+                valid = false;
+            }
+
+            if (!phone || !/^01[3-9]\d{8}$/.test(phone)) {
+                phoneErr.classList.add('show');
+                phoneIn.classList.add('field-error');
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        // ============================================================
+        // ৬. Review Grid তৈরি করা
+        // ============================================================
+        function buildReviewGrid() {
+            const total = baseTotal + addonTotal;
+
+            // selected add-ons list
+            const selectedAddons = Array.from(document.querySelectorAll('.addon-card.selected'))
+                .map(c => c.querySelector('.addon-name')?.textContent)
+                .filter(Boolean);
+
+            const reviewGrid = document.getElementById('reviewGrid');
+            if (!reviewGrid) return;
+
+            reviewGrid.innerHTML = `
+        <div class="review-item">
+            <span class="review-item-label"><i class="fas fa-car"></i> Car</span>
+            <span class="review-item-value">${bookingData.carName || '—'}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-item-label"><i class="fas fa-user"></i> Driver</span>
+            <span class="review-item-value">${document.getElementById('driverName')?.value || '—'}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-item-label"><i class="fas fa-phone"></i> Phone</span>
+            <span class="review-item-value">${document.getElementById('driverPhone')?.value || '—'}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-item-label"><i class="fas fa-calendar-check"></i> Pickup</span>
+            <span class="review-item-value">${formatDateTime(bookingData.pickupDate)}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-item-label"><i class="fas fa-calendar-times"></i> Return</span>
+            <span class="review-item-value">${formatDateTime(bookingData.returnDate)}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-item-label"><i class="fas fa-map-marker-alt"></i> Location</span>
+            <span class="review-item-value">${bookingData.pickupLocation || '—'}</span>
+        </div>
+        <div class="review-item">
+            <span class="review-item-label"><i class="fas fa-clock"></i> Duration</span>
+            <span class="review-item-value">${document.getElementById('bookingDuration')?.textContent || '—'}</span>
+        </div>
+        ${selectedAddons.length > 0 ? `
+        <div class="review-item">
+            <span class="review-item-label"><i class="fas fa-plus-circle"></i> Add-ons</span>
+            <span class="review-item-value">${selectedAddons.join(', ')}</span>
+        </div>` : ''}
+        <div class="review-item" style="background:#eff6ff;">
+            <span class="review-item-label"><i class="fas fa-money-bill-wave"></i> Rental Cost</span>
+            <span class="review-item-value">${document.getElementById('sidebarRentalCost')?.textContent || '৳0'}</span>
+        </div>
+        <div class="review-item" style="background:#eff6ff;">
+            <span class="review-item-label"><i class="fas fa-concierge-bell"></i> Service Fee</span>
+            <span class="review-item-value">৳${SERVICE_FEE}</span>
+        </div>
+        <div class="review-item" style="background:#eff6ff;">
+            <span class="review-item-label"><i class="fas fa-shield-alt"></i> Insurance</span>
+            <span class="review-item-value">৳${INSURANCE}</span>
+        </div>
+        ${addonTotal > 0 ? `
+        <div class="review-item" style="background:#eff6ff;">
+            <span class="review-item-label"><i class="fas fa-plus"></i> Add-ons Total</span>
+            <span class="review-item-value">৳${addonTotal.toLocaleString()}</span>
+        </div>` : ''}
+        <div class="review-total">
+            <span>Total Payable</span>
+            <span class="total-amount">৳${total.toLocaleString()}</span>
+        </div>
+    `;
+        }
+
+        // ============================================================
+        // ৭. Complete Booking & Payment
+        // ============================================================
+        window.completeBooking = async function () {
+            // Terms check
+            const terms = document.getElementById('agreeTerms');
+            const termsErr = document.getElementById('termsError');
+            termsErr.classList.remove('show');
+
+            if (!terms?.checked) {
+                termsErr.classList.add('show');
+                return;
+            }
+
+            const btn = document.getElementById('confirmBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            try {
+                // User check
+                const userStr = localStorage.getItem('udrive_user');
+                if (!userStr) {
+                    alert("Please log in to complete your booking.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+                const user = JSON.parse(userStr);
+
+                // Car ID check
+                const carId = bookingData.carId;
+                if (!carId) throw new Error("Invalid Car ID! Please go back and select the car again.");
+
+                // Final total
+                const finalTotal = baseTotal + addonTotal;
+                if (!finalTotal || finalTotal <= 0) throw new Error("Invalid amount! Please recalculate.");
+
+                // ১. Supabase এ Booking insert
+                const newBookingId = crypto.randomUUID();
+
+                const insertData = {
+                    booking_id: newBookingId,
+                    user_id: user.id,
+                    car_id: String(carId),
+                    car_name: bookingData.carName || 'Car',
+                    pickup_date: bookingData.pickupDate || '',
+                    return_date: bookingData.returnDate || '',
+                    pickup_location: bookingData.pickupLocation || 'Dhaka',
+                    total_price: finalTotal,
+                    status: 'pending',
+                    driver_name: document.getElementById('driverName')?.value?.trim() || null,
+                    driver_phone: document.getElementById('driverPhone')?.value?.trim() || null,
+                };
+
+                console.log("📝 Inserting booking:", insertData);
+
+                const { error: bookingError } = await window.supabaseClient
+                    .from('bookings')
+                    .insert([insertData]);
+
+                if (bookingError) throw new Error("Database Error: " + bookingError.message);
+
+                console.log("✅ Booking saved! ID:", newBookingId);
+
+                // ২. Payment init
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting to SSLCommerz...';
+
+                const paymentPayload = {
+                    amount: finalTotal,
+                    payment_method: 'card',
+                    user_id: user.id,
+                    description: `Booking Payment - ${bookingData.carName}`,
+                    carName: bookingData.carName,
+                    customerName: document.getElementById('driverName')?.value?.trim()
+                        || user.user_metadata?.name || 'Customer',
+                    customerEmail: user.email || 'customer@udrive.com',
+                    bookingId: newBookingId
+                };
+
+                console.log("💳 Sending to payment server:", paymentPayload);
+
+                const response = await fetch('/api/payment/init', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(paymentPayload)
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.error || errData.message || `Server Error ${response.status}`);
+                }
+
+                const apiData = await response.json();
+                console.log("✅ Payment server response:", apiData);
+
+                // ৩. SSLCommerz redirect
+                const gatewayUrl = apiData.gateway_url || apiData.url;
+                if (gatewayUrl) {
+                    sessionStorage.setItem('lastBookingId', newBookingId);
+                    sessionStorage.setItem('lastCarName', bookingData.carName);
+                    window.location.replace(gatewayUrl);
+                } else {
+                    throw new Error("Payment URL পাওয়া যায়নি! Backend response: " + JSON.stringify(apiData));
+                }
+
+            } catch (err) {
+                console.error("❌ completeBooking error:", err);
+                alert("⚠️ " + err.message + "\n\nCheck:\n1. Server চালু? (Port 5000)\n2. Console এ error দেখুন।");
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pay Now';
+                btn.disabled = false;
+            }
+        };
+
+        // ============================================================
+        // ৮. Payment Return Check (success=true URL parameter)
+        // ============================================================
+        function checkPaymentReturn() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('success') !== 'true') return;
+
+            // Steps লুকাও, success দেখাও
+            document.querySelector('.reservation-layout').style.display = 'none';
+            document.querySelector('.progress-steps').style.display = 'none';
+            document.querySelector('.page-title').style.display = 'none';
+
+            const successEl = document.getElementById('successMessage');
+            successEl.classList.add('show');
+
+            const lastId = sessionStorage.getItem('lastBookingId') || '—';
+            const lastName = sessionStorage.getItem('lastCarName') || bookingData.carName || '—';
+
+            setText('savedBookingId', '#' + lastId.substring(0, 8).toUpperCase());
+            setText('savedCarName', lastName);
+
+            // sessionStorage পরিষ্কার
+            sessionStorage.removeItem('currentBooking');
+            sessionStorage.removeItem('lastBookingId');
+            sessionStorage.removeItem('lastCarName');
+        }
+
+        // ============================================================
+        // ৯. Helper Functions
+        // ============================================================
+        function setText(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        }
+
+        function setImg(id, src) {
+            const el = document.getElementById(id);
+            if (el) el.src = src;
+        }
+
+        function getCarImage(data) {
+            if (data.carDetails?.images) {
+                const imgs = data.carDetails.images;
+                if (Array.isArray(imgs) && imgs.length > 0) return imgs[0]?.data || imgs[0];
+                if (typeof imgs === 'string') return imgs;
+            }
+            return 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400';
+        }
+
+        function formatDateTime(str) {
+            if (!str) return '—';
+            try {
+                return new Date(str).toLocaleString('en-BD', {
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            } catch { return str; }
+        }
+
+        function calculateHours(pickup, returnDate) {
+            if (!pickup || !returnDate) return 24;
+            const diff = new Date(returnDate) - new Date(pickup);
+            return Math.max(1, Math.ceil(diff / (1000 * 60 * 60)));
+        }
+
+        // ============================================================
+        // ১০. Header & Footer
+        // ============================================================
+        function loadHeader() {
+            const user = localStorage.getItem('udrive_user');
+            const headerEl = document.getElementById('header');
+            if (!headerEl) return;
+
+            headerEl.innerHTML = `
+        <header>
+            <div class="container header-inner">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-car" style="color:#ef4444; margin-right:5px;"></i> Udrive
+                </a>
+                <div class="nav-links">
+                    <a href="search.html">Find Cars</a>
+                    <a href="bookings.html">My Bookings</a>
+                    ${user
+                    ? `<a href="#" class="logout" onclick="handleLogout(event)">Logout</a>`
+                    : `<a href="login.html" style="color:#0f766e; font-weight:bold;">Login</a>`
+                }
+                </div>
+            </div>
+        </header>`;
+        }
+
+        function loadFooter() {
+            const footerEl = document.getElementById('footer');
+            if (footerEl) {
+                footerEl.innerHTML = `<footer>&copy; 2026 Udrive Bangladesh. All rights reserved.</footer>`;
+            }
+        }
+
+        function handleLogout(e) {
+            e.preventDefault();
+            localStorage.removeItem('udrive_user');
+            if (window.supabaseClient) window.supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - Udrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Dashboard -->
+    <div class="dashboard-page">
+        <div class="container">
+            <div class="dashboard-layout">
+                <!-- Sidebar -->
+                <aside class="dashboard-sidebar">
+                    <div class="user-profile-card">
+                        <div class="profile-image">
+                            <img id="userProfileImage" src="assets/images/users/default.jpg" alt="Profile">
+                        </div>
+                        <h3 id="userName">User Name</h3>
+                        <p id="userEmail">user@email.com</p>
+                        <a href="profile.html" class="btn btn-outline btn-sm">Edit Profile</a>
+                    </div>
+                    
+                    <nav class="sidebar-nav">
+                        <a href="dashboard.html" class="nav-link active">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="bookings.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>My Bookings</span>
+                        </a>
+                        <a href="kyc-verification.html" class="nav-link">
+                            <i class="fas fa-id-card"></i>
+                            <span>KYC Verification</span>
+                        </a>
+                        <a href="documents.html" class="nav-link">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Documents</span>
+                        </a>
+                        <a href="reviews.html" class="nav-link">
+                            <i class="fas fa-star"></i>
+                            <span>Reviews</span>
+                        </a>
+                        <a href="settings.html" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="nav-link" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="dashboard-content">
+                    <!-- Welcome Section -->
+                    <div class="welcome-section">
+                        <h1>Welcome back, <span id="welcomeName">User</span>!</h1>
+                        <p>Here's what's happening with your bookings.</p>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalBookings">0</h3>
+                                <p>Total Bookings</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalSpent">৳0</h3>
+                                <p>Total Spent</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="avgRating">0.0</h3>
+                                <p>Avg. Rating</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="upcomingTrips">0</h3>
+                                <p>Upcoming Trips</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Trips -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h2>Upcoming Trips</h2>
+                            <a href="bookings.html" class="btn btn-outline btn-sm">View All</a>
+                        </div>
+                        <div class="trips-list" id="upcomingTripsList">
+                            <!-- Upcoming trips loaded dynamically -->
+                            <div class="empty-state">
+                                <i class="fas fa-calendar-times"></i>
+                                <p>No upcoming trips</p>
+                                <a href="search.html" class="btn btn-primary">Book a Car</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Bookings -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h2>Recent Bookings</h2>
+                            <a href="bookings.html" class="btn btn-outline btn-sm">View All</a>
+                        </div>
+                        <div class="bookings-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Car</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentBookingsTable">
+                                    <!-- Recent bookings loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="actions-grid">
+                            <a href="search.html" class="action-card">
+                                <i class="fas fa-search"></i>
+                                <span>Book a Car</span>
+                            </a>
+                            <a href="kyc-verification.html" class="action-card">
+                                <i class="fas fa-id-card"></i>
+                                <span>Complete KYC</span>
+                            </a>
+                            <a href="refer.html" class="action-card">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Refer & Earn</span>
+                            </a>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script src="js/dashboard.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Header/Footer load from main.js
+            if(typeof loadHeader === 'function') loadHeader();
+            if(typeof loadFooter === 'function') loadFooter();
+        });
+    </script>
+</body>
+</html>
+    

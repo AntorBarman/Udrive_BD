@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Your Car - Udrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/earner.css">
+    <link rel="stylesheet" href="css/earner-portal-page.css">
+    <link rel="stylesheet" href="css/wallet.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="earner-portal">
+        <div class="container">
+            <div class="earner-dashboard">
+                <div class="earner-sidebar">
+                    <div class="earner-profile">
+                        <div class="profile-avatar" id="profileInitial">U</div>
+                        <div class="profile-name" id="earnerNameDisplay">User Name</div>
+                        <div class="profile-status status-verified" id="verificationStatus">
+                            <i class="fas fa-check-circle"></i> Verified
+                        </div>
+                    </div>
+                    
+                    <nav class="sidebar-menu">
+                        <a href="#" class="menu-item active" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                        <a href="#" class="menu-item" data-section="list-car">
+                            <i class="fas fa-car"></i> List Your Car
+                        </a>
+                        <a href="#" class="menu-item" data-section="my-cars">
+                            <i class="fas fa-car-side"></i> My Cars
+                        </a>
+                        <a href="#" class="menu-item" data-section="earnings">
+                            <i class="fas fa-money-bill-wave"></i> Earnings
+                        </a>
+                        <a href="#" class="menu-item" data-section="wallet">
+                            <i class="fas fa-wallet"></i> Wallet
+                        </a>
+                        <a href="#" class="menu-item" data-section="documents">
+                            <i class="fas fa-file-alt"></i> Documents
+                        </a>
+                        <a href="#" class="menu-item" data-section="settings">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="earner-main-content">
+                    
+                    <div id="dashboard" class="earner-main active">
+                        <div class="dashboard-header">
+                            <h2>Dashboard Overview</h2>
+                        </div>
+                        <div class="earnings-stats">
+                            <div class="earning-stat">
+                                <h3>৳0</h3>
+                                <p>Total Earnings</p>
+                            </div>
+                            <div class="earning-stat">
+                                <h3 id="activeCarsCount">0</h3>
+                                <p>Active Cars</p>
+                            </div>
+                            <div class="earning-stat">
+                                <h3>0</h3>
+                                <p>Total Bookings</p>
+                            </div>
+                        </div>
+                        <div class="empty-state">
+                            <h3>Welcome to Udrive Earner!</h3>
+                            <p>Select "List Your Car" to start earning.</p>
+                        </div>
+                    </div>
+
+                    <div id="list-car" class="earner-main">
+                        <div class="dashboard-card">
+                            <h2>List Your Car</h2>
+                            <p class="section-description">Fill in your car details and upload required documents for verification.</p>
+                            
+                            <form id="carListingForm">
+                                <div class="form-section">
+                                    <h3>Car Information</h3>
+                                    <div class="form-row">
+                                        <div class="form-group required">
+                                            <label>Car Make</label>
+                                            <select id="carMake" required>
+                                                <option value="">Select Make</option>
+                                                <option>Toyota</option>
+                                                <option>Honda</option>
+                                                <option>Nissan</option>
+                                                <option>Mitsubishi</option>
+                                                <option>Suzuki</option>
+                                                <option>Hyundai</option>
+                                                <option>Kia</option>
+                                                <option>BMW</option>
+                                                <option>Mercedes</option>
+                                                <option>Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label>Car Model</label>
+                                            <input type="text" id="carModel" placeholder="e.g., Allion, City, X-Trail" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group required">
+                                            <label>Manufacturing Year</label>
+                                            <input type="number" id="carYear" min="2010" max="2024" required>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label>Fuel Type</label>
+                                            <select id="fuelType" required>
+                                                <option value="">Select Fuel Type</option>
+                                                <option>Petrol</option>
+                                                <option>Diesel</option>
+                                                <option>CNG</option>
+                                                <option>Electric</option>
+                                                <option>Hybrid</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group required">
+                                            <label>Transmission</label>
+                                            <select id="transmission" required>
+                                                <option value="">Select Transmission</option>
+                                                <option>Automatic</option>
+                                                <option>Manual</option>
+                                                <option>Semi-Automatic</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label>Number of Seats</label>
+                                            <select id="seats" required>
+                                                <option value="">Select Seats</option>
+                                                <option>4</option>
+                                                <option>5</option>
+                                                <option>7</option>
+                                                <option>8+</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group required">
+                                        <label>Car Registration Number</label>
+                                        <input type="text" id="regNumber" placeholder="e.g., DHAKA METRO-GA-11-1234" required>
+                                    </div>
+                                    
+                                    <div class="form-group required">
+                                        <label>Daily Rental Price (৳)</label>
+                                        <input type="number" id="dailyPrice" min="1500" max="20000" required>
+                                        <small class="form-hint">Recommended price: ৳2,500 - ৳6,000 per day</small>
+                                    </div>
+                                    
+                                    <div class="form-group required">
+                                        <label>Car Location</label>
+                                        <select id="carLocation" required>
+                                            <option value="">Select Location</option>
+                                            <option>Dhaka - Gulshan</option>
+                                            <option>Dhaka - Banani</option>
+                                            <option>Dhaka - Uttara</option>
+                                            <option>Dhaka - Dhanmondi</option>
+                                            <option>Chittagong</option>
+                                            <option>Sylhet</option>
+                                            <option>Khulna</option>
+                                            <option>Rajshahi</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group required">
+                                        <label>Car Description</label>
+                                        <textarea id="carDescription" rows="3" placeholder="Describe your car's features, condition, and any special notes..." required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h3>Car Photos (Required)</h3>
+                                    <div class="images-upload-section">
+                                        <div class="images-header">
+                                            <h4><i class="fas fa-camera"></i> Upload Car Photos</h4>
+                                            <div class="document-status status-pending" id="imageUploadStatus">0/3 photos uploaded</div>
+                                        </div>
+                                        <p class="images-requirements">Please upload at least 3 clear photos of your car from different angles.</p>
+                                        
+                                        <div class="image-preview-grid">
+                                            <div class="image-upload-card" id="imageUpload1" onclick="triggerImageUpload(1)">
+                                                <i class="fas fa-plus"></i>
+                                                <p>Front View</p>
+                                                <small>Required</small>
+                                            </div>
+                                            <div class="image-upload-card" id="imageUpload2" onclick="triggerImageUpload(2)">
+                                                <i class="fas fa-plus"></i>
+                                                <p>Side View</p>
+                                                <small>Required</small>
+                                            </div>
+                                            <div class="image-upload-card" id="imageUpload3" onclick="triggerImageUpload(3)">
+                                                <i class="fas fa-plus"></i>
+                                                <p>Interior View</p>
+                                                <small>Required</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <input type="file" id="imageInput1" class="file-input" accept="image/*" style="display: none;">
+                                        <input type="file" id="imageInput2" class="file-input" accept="image/*" style="display: none;">
+                                        <input type="file" id="imageInput3" class="file-input" accept="image/*" style="display: none;">
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h3>Required Documents</h3>
+                                    
+                                    <div class="document-upload-section" id="docSection1">
+                                        <div class="document-header">
+                                            <h4><i class="fas fa-file-contract"></i> Registration Certificate</h4>
+                                            <div class="document-status status-pending" id="docStatus1">Not Uploaded</div>
+                                        </div>
+                                        <div class="upload-container">
+                                            <div class="upload-info">
+                                                <div class="upload-icon"><i class="fas fa-file-pdf"></i></div>
+                                                <div class="upload-details"><h5>Registration.pdf</h5><p>Max 10MB</p></div>
+                                            </div>
+                                            <div class="file-input-wrapper">
+                                                <input type="file" id="docInput1" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+                                                <label for="docInput1" class="file-input-label">Choose File</label>
+                                            </div>
+                                        </div>
+                                        <div id="docPreview1" class="uploaded-files"></div>
+                                    </div>
+
+                                    <div class="document-upload-section" id="docSection2">
+                                        <div class="document-header">
+                                            <h4><i class="fas fa-file-medical"></i> Fitness Certificate</h4>
+                                            <div class="document-status status-pending" id="docStatus2">Not Uploaded</div>
+                                        </div>
+                                        <div class="upload-container">
+                                            <div class="upload-info">
+                                                <div class="upload-icon"><i class="fas fa-file-pdf"></i></div>
+                                                <div class="upload-details"><h5>Fitness.pdf</h5><p>Max 10MB</p></div>
+                                            </div>
+                                            <div class="file-input-wrapper">
+                                                <input type="file" id="docInput2" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+                                                <label for="docInput2" class="file-input-label">Choose File</label>
+                                            </div>
+                                        </div>
+                                        <div id="docPreview2" class="uploaded-files"></div>
+                                    </div>
+
+                                    <div class="document-upload-section" id="docSection3">
+                                        <div class="document-header">
+                                            <h4><i class="fas fa-file-invoice-dollar"></i> Tax Token</h4>
+                                            <div class="document-status status-pending" id="docStatus3">Not Uploaded</div>
+                                        </div>
+                                        <div class="upload-container">
+                                            <div class="upload-info">
+                                                <div class="upload-icon"><i class="fas fa-file-pdf"></i></div>
+                                                <div class="upload-details"><h5>TaxToken.pdf</h5><p>Max 10MB</p></div>
+                                            </div>
+                                            <div class="file-input-wrapper">
+                                                <input type="file" id="docInput3" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+                                                <label for="docInput3" class="file-input-label">Choose File</label>
+                                            </div>
+                                        </div>
+                                        <div id="docPreview3" class="uploaded-files"></div>
+                                    </div>
+
+                                    <div class="document-upload-section" id="docSection4">
+                                        <div class="document-header">
+                                            <h4><i class="fas fa-shield-alt"></i> Insurance Papers</h4>
+                                            <div class="document-status status-pending" id="docStatus4">Not Uploaded</div>
+                                        </div>
+                                        <div class="upload-container">
+                                            <div class="upload-info">
+                                                <div class="upload-icon"><i class="fas fa-file-pdf"></i></div>
+                                                <div class="upload-details"><h5>Insurance.pdf</h5><p>Max 10MB</p></div>
+                                            </div>
+                                            <div class="file-input-wrapper">
+                                                <input type="file" id="docInput4" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+                                                <label for="docInput4" class="file-input-label">Choose File</label>
+                                            </div>
+                                        </div>
+                                        <div id="docPreview4" class="uploaded-files"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="agreeTerms" required>
+                                            <span>I agree to the <a href="#">Terms & Conditions</a>.</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="agreePrivacy" required>
+                                            <span>I agree to the <a href="#">Privacy Policy</a>.</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary" id="saveDraftBtn">Save as Draft</button>
+                                    <button type="submit" class="btn btn-primary" id="submitListingBtn">Submit for Review</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="my-cars" class="earner-main">
+                        <div class="dashboard-header">
+                            <h2>My Listed Cars</h2>
+                            <button class="btn btn-primary" onclick="document.querySelector('[data-section=\'list-car\']').click()">
+                                <i class="fas fa-plus"></i> Add New Car
+                            </button>
+                        </div>
+                        
+                        <div id="noCarsState" class="empty-state" style="display: none;">
+                            <i class="fas fa-car-side"></i>
+                            <h3>No Cars Listed Yet</h3>
+                            <p>Start earning by listing your car today!</p>
+                            <button class="btn btn-outline" onclick="document.querySelector('[data-section=\'list-car\']').click()">List Your Car</button>
+                        </div>
+
+                        <div class="cars-grid" id="myCarsGrid">
+                            <div style="text-align:center; width:100%; padding:40px;"><i class="fas fa-spinner fa-spin fa-2x"></i> Loading your cars...</div>
+                        </div>
+                    </div>
+
+                    <div id="earnings" class="earner-main">
+                        <div class="dashboard-card"><h2>Earnings History</h2><p class="empty-state">No records found.</p></div>
+                    </div>
+                    <div id="documents" class="earner-main">
+                        <div class="dashboard-card"><h2>My Documents</h2><p class="empty-state">No documents uploaded.</p></div>
+                    </div>
+                    <div id="settings" class="earner-main">
+                        <div class="dashboard-card"><h2>Settings</h2><p>Profile settings will be available soon.</p></div>
+                    </div>
+
+                    <div id="wallet" class="earner-main">
+                        <div class="dashboard-card">
+                            <div class="dashboard-header">
+                                <h2>My Wallet</h2>
+                                <button class="btn btn-primary" onclick="showAddMoneyModal()">
+                                    <i class="fas fa-plus"></i> Add Money
+                                </button>
+                            </div>
+
+                            <!-- Wallet Balance -->
+                            <div class="wallet-balance-card">
+                                <div class="balance-info">
+                                    <h3>Current Balance</h3>
+                                    <div class="balance-amount" id="currentBalance">৳0.00</div>
+                                    <p class="balance-updated">Updated just now</p>
+                                </div>
+                                <div class="balance-actions">
+                                    <button class="btn btn-outline" onclick="showAddMoneyModal()">
+                                        <i class="fas fa-plus"></i> Add Money
+                                    </button>
+                                    <button class="btn btn-outline" onclick="showWithdrawModal()">
+                                        <i class="fas fa-money-bill-wave"></i> Withdraw
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Wallet Stats -->
+                            <div class="wallet-stats">
+                                <div class="stat-card">
+                                    <h4 id="totalAdded">৳0</h4>
+                                    <p>Total Added</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="totalSpentWallet">৳0</h4>
+                                    <p>Total Spent</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="totalTransactions">0</h4>
+                                    <p>Transactions</p>
+                                </div>
+                            </div>
+
+                            <!-- Recent Transactions -->
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <h2>Recent Transactions</h2>
+                                </div>
+                                <div id="recentTransactions">
+                                    <!-- Transactions loaded dynamically -->
+                                    <div class="empty-state">
+                                        <i class="fas fa-exchange-alt"></i>
+                                        <p>No transactions yet</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Methods -->
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <h2>Payment Methods</h2>
+                                    <button class="btn btn-outline btn-sm" onclick="addPaymentMethod()">
+                                        <i class="fas fa-plus"></i> Add New
+                                    </button>
+                                </div>
+                                <div class="payment-methods-list">
+                                    <div class="payment-method-item">
+                                        <div class="method-icon">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="method-info">
+                                            <h4>Udrive Wallet</h4>
+                                            <p>Primary payment method</p>
+                                        </div>
+                                        <div class="method-status">
+                                            <span class="badge badge-success">Active</span>
+                                        </div>
+                                    </div>
+                                    <div class="payment-method-item">
+                                        <div class="method-icon">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                        <div class="method-info">
+                                            <h4>bKash</h4>
+                                            <p>Mobile banking</p>
+                                        </div>
+                                        <div class="method-status">
+                                            <span class="badge badge-outline">Not Linked</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2>Car Listing Submitted!</h2></div>
+            <div class="modal-body">
+                <p>Your car listing has been submitted for review.</p>
+                <p>You can continue to manage your listing from the dashboard.</p>
+            </div>
+            <div class="modal-footer"><button class="btn btn-secondary" id="closeModalBtn">Close</button></div>
+        </div>
+    </div>
+
+    <!-- Add Money Modal -->
+    <div class="modal" id="addMoneyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Money to Wallet</h3>
+                <button class="modal-close" onclick="closeAddMoneyModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Amount</label>
+                    <div class="input-group">
+                        <span class="input-group-text">৳</span>
+                        <input type="number" id="addAmount" placeholder="Enter amount" min="100" max="50000">
+                    </div>
+                    <small class="text-muted">Minimum: ৳100, Maximum: ৳50,000</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <div class="payment-options">
+                        <div class="payment-option selected" data-method="bkash">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>bKash</span>
+                        </div>
+                        <div class="payment-option" data-method="nagad">
+                            <i class="fas fa-wallet"></i>
+                            <span>Nagad</span>
+                        </div>
+                        <div class="payment-option" data-method="card">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Card</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="bkashDetails">
+                    <label>bKash Number</label>
+                    <input type="tel" placeholder="01XXXXXXXXX">
+                </div>
+                
+                <button class="btn btn-primary btn-block" onclick="processTopUp()">Add Money</button>
+                
+                <div class="terms-note">
+                    <p><small>By adding money, you agree to our <a href="terms-conditions.html">Terms & Conditions</a></small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/payment.js"></script>
+    <script src="js/wallet.js"></script>
+    <script>
+
+        const uploadedImages = { 1: null, 2: null, 3: null };
+        const uploadedDocuments = { 1: null, 2: null, 3: null, 4: null };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLogin();
+            loadHeader();
+            loadFooter();
+            initEarnerPortal();
+            loadEarnerData();
+            
+            // Handle URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const section = urlParams.get('section');
+            const success = urlParams.get('success');
+            
+            if (section) {
+                showSection(section);
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    if (item.getAttribute('data-section') === section) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+            
+            if (success === 'true') {
+                setTimeout(() => {
+                    alert('Payment successful! Your wallet has been updated.');
+                }, 1000);
+            }
+        });
+
+        function checkLogin() {
+            const user = localStorage.getItem('udrive_user');
+            if (!user) {
+                alert("⚠️ গাড়ি লিস্ট করার জন্য আপনাকে প্রথমে লগইন করতে হবে।");
+                window.location.href = 'login.html?redirect=earner-portal.html';
+            }
+        }
+
+        function loadHeader() {
+            const user = localStorage.getItem('udrive_user');
+            const userObj = user ? JSON.parse(user) : null;
+            document.getElementById('header').innerHTML = `
+                <header>
+                    <nav>
+                        <a href="index.html" class="logo">
+                            <i class="fas fa-car" style="color:#ef4444;"></i> Udrive
+                        </a>
+                        <div class="nav-center">
+                            <a href="index.html">Home</a>
+                            <a href="search.html">Search Cars</a>
+                            <a href="branches.html">Branches</a>
+                            <a href="earner-portal.html" style="color:#0f766e; font-weight:700;">Earn Money</a>
+                        </div>
+                        <div class="auth-buttons">
+                            ${userObj ? `
+                                <a href="#" onclick="logout()" class="btn-login">Logout</a>
+                            ` : `
+                                <a href="login.html" class="btn-login">Login</a>
+                                <a href="register.html" class="btn-signup">Sign Up</a>
+                            `}
+                        </div>
+                    </nav>
+                </header>`;
+        }
+
+        function loadFooter() {
+            document.getElementById('footer').innerHTML = `<footer><div class="container"><p>&copy; 2026 Udrive.</p></div></footer>`;
+        }
+
+        function initEarnerPortal() {
+            initDashboard();
+            const carYearInput = document.getElementById('carYear');
+            if (carYearInput) {
+                const currentYear = new Date().getFullYear();
+                carYearInput.max = currentYear;
+                carYearInput.value = currentYear;
+            }
+            setupImageUploads();
+            setupDocumentUploads();
+
+            const form = document.getElementById('carListingForm');
+            if (form) form.addEventListener('submit', handleCarListingSubmit);
+
+            const saveDraftBtn = document.getElementById('saveDraftBtn');
+            if (saveDraftBtn) saveDraftBtn.addEventListener('click', () => alert("Draft Saved!"));
+
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', () => {
+                    document.getElementById('successModal').classList.remove('active');
+                    document.querySelector('[data-section="my-cars"]').click();
+                });
+            }
+        }
+
+        function initDashboard() {
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('data-section');
+                    showSection(sectionId);
+                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    if (sectionId === 'my-cars') loadMyCarsList();
+                    if (sectionId === 'wallet' && typeof loadWallet === 'function') loadWallet();
+                });
+            });
+            showSection('dashboard');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.earner-main').forEach(section => section.classList.remove('active'));
+            const section = document.getElementById(sectionId);
+            if (section) section.classList.add('active');
+        }
+
+        async function loadMyCarsList() {
+            const grid = document.getElementById('myCarsGrid');
+            const emptyState = document.getElementById('noCarsState');
+            const activeCarsCount = document.getElementById('activeCarsCount');
+
+            const userStr = localStorage.getItem('udrive_user');
+            if (!userStr) return;
+            const user = JSON.parse(userStr);
+
+            try {
+                const { data: cars, error } = await window.supabaseClient
+                    .from('cars')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('id', { ascending: false });
+
+                if (error) throw error;
+
+                if (!cars || cars.length === 0) {
+                    grid.style.display = 'none';
+                    if (emptyState) emptyState.style.display = 'block';
+                    if (activeCarsCount) activeCarsCount.innerText = '0';
+                    return;
+                }
+
+                if (emptyState) emptyState.style.display = 'none';
+                grid.style.display = 'grid';
+
+                const approvedCars = cars.filter(c => c.status === 'approved' || c.status === 'active').length;
+                if (activeCarsCount) activeCarsCount.innerText = approvedCars;
+
+                grid.innerHTML = cars.map(car => {
+                    const statusClass = car.status === 'approved' || car.status === 'active' ? 'status-verified' :
+                        car.status === 'rejected' ? 'status-rejected' : 'status-pending-review';
+
+                    let imgUrl = 'https://via.placeholder.com/300';
+                    if (car.images && car.images.length > 0) {
+                        imgUrl = car.images[0].data || car.images[0] || imgUrl;
+                    } else if (car.image_url) {
+                        imgUrl = car.image_url;
+                    }
+
+                    return `
+                        <div class="car-card">
+                            <div class="car-image">
+                                <img src="${imgUrl}" alt="${car.name}">
+                            </div>
+                            <div class="car-content">
+                                <div class="car-header">
+                                    <div class="car-title">
+                                        <h3>${car.name}</h3>
+                                        <span class="car-year">${car.year || ''}</span>
+                                    </div>
+                                    <span class="car-status ${statusClass}">${car.status || 'Pending'}</span>
+                                </div>
+                                <p><strong>Location:</strong> ${car.location || 'N/A'}</p>
+                                <p><strong>Price:</strong> ৳${car.daily_rate}/day</p>
+                                <div style="margin-top:15px;">
+                                    <button class="btn btn-secondary btn-block">Manage Listing</button>
+                                </div>
+                            </div>
+                        </div>`;
+                }).join('');
+
+            } catch (err) {
+                console.error("Error fetching cars:", err);
+                grid.innerHTML = `<p style="color:red; text-align:center;">Failed to load cars: ${err.message}</p>`;
+            }
+        }
+
+        // ✅ Base64 কে Blob এ convert
+        function base64ToBlob(base64Data) {
+            const parts = base64Data.split(';base64,');
+            const contentType = parts[0].split(':')[1];
+            const raw = atob(parts[1]);
+            const uInt8Array = new Uint8Array(raw.length);
+            for (let i = 0; i < raw.length; i++) uInt8Array[i] = raw.charCodeAt(i);
+            return new Blob([uInt8Array], { type: contentType });
+        }
+
+        async function handleCarListingSubmit(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitListingBtn');
+
+            const userStr = localStorage.getItem('udrive_user');
+            if (!userStr) { alert("Please login first!"); return; }
+            const user = JSON.parse(userStr);
+
+            if (!document.getElementById('carMake').value || !document.getElementById('dailyPrice').value) {
+                alert("❌ Make and Price are required!"); return;
+            }
+            if (!document.getElementById('agreeTerms').checked) { alert("❌ You must agree to terms!"); return; }
+
+            const imgArray = Object.values(uploadedImages).filter(i => i !== null);
+            if (imgArray.length < 3) { alert("❌ Please upload 3 images!"); return; }
+
+            try {
+                submitBtn.innerText = "Uploading...";
+                submitBtn.disabled = true;
+
+                // ✅ Step 1: Car images upload
+                const imageUrls = [];
+                for (let i = 0; i < imgArray.length; i++) {
+                    const img = imgArray[i];
+                    const blob = base64ToBlob(img.data);
+                    const ext = img.name.split('.').pop() || 'jpg';
+                    const filePath = `cars/${user.id}_${Date.now()}_${i}.${ext}`;
+
+                    const { error: uploadError } = await window.supabaseClient.storage
+                        .from('car-images')
+                        .upload(filePath, blob, {
+                            cacheControl: '3600',
+                            upsert: true,
+                            contentType: blob.type || 'image/jpeg'
+                        });
+
+                    if (uploadError) throw new Error("Image upload failed: " + uploadError.message);
+
+                    const { data: urlData } = window.supabaseClient.storage
+                        .from('car-images')
+                        .getPublicUrl(filePath);
+
+                    imageUrls.push(urlData.publicUrl);
+                }
+
+                // ✅ Step 2: Car data insert
+                const make = document.getElementById('carMake').value;
+                const model = document.getElementById('carModel').value;
+                const regNumber = document.getElementById('regNumber').value;
+
+                const carData = {
+                    user_id: user.id,
+                    name: `${make} ${model}`,
+                    make: make,
+                    model: model,
+                    year: parseInt(document.getElementById('carYear').value),
+                    daily_rate: parseFloat(document.getElementById('dailyPrice').value),
+                    location: document.getElementById('carLocation').value,
+                    fuel_type: document.getElementById('fuelType').value,
+                    transmission: document.getElementById('transmission').value,
+                    seats: parseInt(document.getElementById('seats').value),
+                    description: document.getElementById('carDescription').value + ` (Reg: ${regNumber})`,
+                    status: 'pending',
+                    image_url: imageUrls[0],
+                    images: imageUrls,
+                    features: ["Air Conditioning", "Bluetooth"],
+                    rating: 4.5
+                };
+
+                const { data: insertedCars, error } = await window.supabaseClient
+                    .from('cars')
+                    .insert([carData])
+                    .select('id');
+
+                if (error) throw error;
+
+                const carId = insertedCars?.[0]?.id;
+
+                // ✅ Step 3: Documents upload to Supabase Storage
+                const docLabels = ['registration', 'fitness', 'tax_token', 'insurance'];
+                const docUrls = {
+                    registration_url: null,
+                    fitness_url: null,
+                    tax_token_url: null,
+                    insurance_url: null
+                };
+
+                for (let i = 1; i <= 4; i++) {
+                    const doc = uploadedDocuments[i];
+                    if (!doc || !doc.file) continue;
+
+                    const ext = doc.name.split('.').pop() || 'pdf';
+                    const filePath = `docs/${user.id}_${docLabels[i-1]}_${Date.now()}.${ext}`;
+
+                    const { error: docUploadError } = await window.supabaseClient.storage
+                        .from('car-documents')
+                        .upload(filePath, doc.file, {
+                            cacheControl: '3600',
+                            upsert: true,
+                            contentType: doc.file.type || 'application/pdf'
+                        });
+
+                    if (docUploadError) {
+                        console.warn(`Doc ${i} upload failed:`, docUploadError.message);
+                        continue;
+                    }
+
+                    const { data: urlData } = window.supabaseClient.storage
+                        .from('car-documents')
+                        .getPublicUrl(filePath);
+
+                    docUrls[`${docLabels[i-1]}_url`] = urlData.publicUrl;
+                }
+
+                // ✅ Step 4: car_documents table এ save
+                if (carId) {
+                    const { error: docDbError } = await window.supabaseClient
+                        .from('car_documents')
+                        .insert([{
+                            car_id: carId,
+                            user_id: user.id,
+                            ...docUrls
+                        }]);
+
+                    if (docDbError) console.warn("Doc DB save failed:", docDbError.message);
+                }
+
+                // ✅ Step 5: Reset form
+                document.getElementById('successModal').classList.add('active');
+                document.getElementById('carListingForm').reset();
+                for (let k in uploadedImages) uploadedImages[k] = null;
+                for (let k in uploadedDocuments) uploadedDocuments[k] = null;
+                for (let i = 1; i <= 3; i++) removeImage(i);
+                for (let i = 1; i <= 4; i++) {
+                    document.getElementById(`docStatus${i}`).textContent = 'Not Uploaded';
+                    document.getElementById(`docStatus${i}`).className = 'document-status status-pending';
+                    document.getElementById(`docPreview${i}`).innerHTML = '';
+                }
+
+                loadMyCarsList();
+
+            } catch (err) {
+                console.error("Supabase Error:", err);
+                alert("❌ Failed to submit: " + err.message);
+            } finally {
+                submitBtn.innerText = "Submit for Review";
+                submitBtn.disabled = false;
+            }
+        }
+
+        function setupImageUploads() {
+            for (let i = 1; i <= 3; i++) {
+                const input = document.getElementById(`imageInput${i}`);
+                if (input) input.addEventListener('change', (e) => handleImageUpload(e, i));
+            }
+        }
+
+        function setupDocumentUploads() {
+            for (let i = 1; i <= 4; i++) {
+                const input = document.getElementById(`docInput${i}`);
+                if (input) input.addEventListener('change', (e) => handleDocumentUpload(e, i));
+            }
+        }
+
+        function triggerImageUpload(n) { document.getElementById(`imageInput${n}`).click(); }
+
+        function handleImageUpload(e, n) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                uploadedImages[n] = { name: file.name, data: ev.target.result };
+                updateImagePreview(n, ev.target.result);
+                updateUploadStatus();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ✅ আসল file object save করা হচ্ছে
+        function handleDocumentUpload(e, n) {
+            const file = e.target.files[0];
+            if (!file) return;
+            uploadedDocuments[n] = { name: file.name, file: file };
+            document.getElementById(`docStatus${n}`).textContent = 'Uploaded';
+            document.getElementById(`docStatus${n}`).className = 'document-status status-uploaded';
+            document.getElementById(`docPreview${n}`).innerHTML = `
+                <div class="uploaded-file">
+                    <div class="file-info">
+                        <i class="fas fa-file-pdf file-icon"></i>
+                        <div class="file-details"><h5>${file.name}</h5></div>
+                    </div>
+                </div>`;
+        }
+
+        function updateImagePreview(n, data) {
+            const card = document.getElementById(`imageUpload${n}`);
+            const div = document.createElement('div');
+            div.className = 'image-preview';
+            div.innerHTML = `<img src="${data}"><button class="image-remove" onclick="removeImage(${n})"><i class="fas fa-times"></i></button>`;
+            card.parentNode.replaceChild(div, card);
+        }
+
+        function removeImage(n) {
+            uploadedImages[n] = null;
+            const preview = document.querySelector(`#imageInput${n}`).parentNode.querySelector('.image-preview');
+            if (!preview) return;
+            const card = document.createElement('div');
+            card.className = 'image-upload-card';
+            card.id = `imageUpload${n}`;
+            card.onclick = () => triggerImageUpload(n);
+            const titles = ['Front View', 'Side View', 'Interior View'];
+            card.innerHTML = `<i class="fas fa-plus"></i><p>${titles[n-1]}</p><small>Required</small>`;
+            preview.parentNode.replaceChild(card, preview);
+            updateUploadStatus();
+        }
+
+        function updateUploadStatus() {
+            const count = Object.values(uploadedImages).filter(i => i !== null).length;
+            document.getElementById('imageUploadStatus').textContent = `${count}/3 photos uploaded`;
+        }
+
+        function loadEarnerData() {
+            const userStr = localStorage.getItem('udrive_user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                const name = user.user_metadata?.name || user.name || 'User';
+                document.getElementById('earnerNameDisplay').textContent = name;
+                document.getElementById('profileInitial').textContent = name.charAt(0).toUpperCase();
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('udrive_user');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

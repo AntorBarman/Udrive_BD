@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet - Udrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/earner.css">
+    <link rel="stylesheet" href="css/wallet.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Wallet Page -->
+    <div class="earner-portal">
+        <div class="container">
+            <div class="earner-dashboard">
+                <!-- Sidebar -->
+                <aside class="earner-sidebar">
+                    <div class="earner-profile">
+                        <div class="profile-avatar" id="profileInitial">U</div>
+                        <div class="profile-name" id="earnerNameDisplay">User Name</div>
+                        <p id="userEmail">user@email.com</p>
+                        <a href="profile.html" class="btn btn-outline btn-sm">Edit Profile</a>
+                    </div>
+                    
+                    <nav class="sidebar-menu">
+                        <a href="earner-portal.html" class="menu-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="bookings.html" class="menu-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>My Bookings</span>
+                        </a>
+                        <a href="kyc-verification.html" class="menu-item">
+                            <i class="fas fa-id-card"></i>
+                            <span>KYC Verification</span>
+                        </a>
+                        <a href="wallet.html" class="menu-item active">
+                            <i class="fas fa-wallet"></i>
+                            <span>Wallet</span>
+                        </a>
+                        <a href="documents.html" class="menu-item">
+                            <i class="fas fa-file-alt"></i>
+                            <i class="fas fa-file-alt"></i>
+                            <span>Documents</span>
+                        </a>
+                        <a href="reviews.html" class="nav-link">
+                            <i class="fas fa-star"></i>
+                            <span>Reviews</span>
+                        </a>
+                        <a href="settings.html" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="earner-main">
+                    <div class="section-header">
+                        <h1>My Wallet</h1>
+                        <button class="btn btn-primary" onclick="showAddMoneyModal()">
+                            <i class="fas fa-plus"></i> Add Money
+                        </button>
+                    </div>
+
+                    <!-- Wallet Balance -->
+                    <div class="wallet-balance-card">
+                        <div class="balance-info">
+                            <h3>Current Balance</h3>
+                            <div class="balance-amount" id="currentBalance">৳0.00</div>
+                            <p class="balance-updated">Updated just now</p>
+                        </div>
+                        <div class="balance-actions">
+                            <button class="btn btn-outline" onclick="showAddMoneyModal()">
+                                <i class="fas fa-plus"></i> Add Money
+                            </button>
+                            <button class="btn btn-outline" onclick="showWithdrawModal()">
+                                <i class="fas fa-money-bill-wave"></i> Withdraw
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="actions-grid">
+                            <button class="action-card" onclick="showAddMoneyModal()">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Add Money</span>
+                            </button>
+                            <button class="action-card" onclick="showSendMoneyModal()">
+                                <i class="fas fa-share"></i>
+                                <span>Send Money</span>
+                            </button>
+                            <button class="action-card" onclick="showWithdrawModal()">
+                                <i class="fas fa-money-check-alt"></i>
+                                <span>Withdraw</span>
+                            </button>
+                            <button class="action-card" onclick="showTransactionHistory()">
+                                <i class="fas fa-history"></i>
+                                <span>History</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h2>Recent Transactions</h2>
+                            <a href="transactions.html" class="btn btn-outline btn-sm">View All</a>
+                        </div>
+                        <div class="transactions-list" id="recentTransactions">
+                            <!-- Transactions loaded dynamically -->
+                            <div class="empty-state">
+                                <i class="fas fa-exchange-alt"></i>
+                                <p>No transactions yet</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h2>Payment Methods</h2>
+                            <button class="btn btn-outline btn-sm" onclick="addPaymentMethod()">
+                                <i class="fas fa-plus"></i> Add New
+                            </button>
+                        </div>
+                        <div class="payment-methods-list">
+                            <div class="payment-method-item">
+                                <div class="method-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h4>Udrive Wallet</h4>
+                                    <p>Primary payment method</p>
+                                </div>
+                                <div class="method-status">
+                                    <span class="badge badge-success">Active</span>
+                                </div>
+                            </div>
+                            <div class="payment-method-item">
+                                <div class="method-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h4>bKash</h4>
+                                    <p>017XX-XXXXXX</p>
+                                </div>
+                                <div class="method-status">
+                                    <span class="badge badge-success">Verified</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wallet Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalAdded">৳0</h3>
+                                <p>Total Added</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalSpentWallet">৳0</h3>
+                                <p>Total Spent</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalTransactions">0</h3>
+                                <p>Total Transactions</p>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Money Modal -->
+    <div class="modal" id="addMoneyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Money to Wallet</h3>
+                <button class="modal-close" onclick="closeAddMoneyModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Amount</label>
+                    <div class="input-group">
+                        <span class="input-group-text">৳</span>
+                        <input type="number" id="addAmount" placeholder="Enter amount" min="100" max="50000">
+                    </div>
+                    <small class="text-muted">Minimum: ৳100, Maximum: ৳50,000</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <div class="payment-options">
+                        <div class="payment-option selected" data-method="bkash">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>bKash</span>
+                        </div>
+                        <div class="payment-option" data-method="nagad">
+                            <i class="fas fa-wallet"></i>
+                            <span>Nagad</span>
+                        </div>
+                        <div class="payment-option" data-method="card">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Card</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="bkashDetails">
+                    <label>bKash Number</label>
+                    <input type="tel" placeholder="01XXXXXXXXX">
+                </div>
+                
+                <button class="btn btn-primary btn-block" onclick="processTopUp()">Add Money</button>
+                
+                <div class="terms-note">
+                    <p><small>By adding money, you agree to our <a href="terms-conditions.html">Terms & Conditions</a></small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Scripts -->
+   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="js/supabase-config.js"></script>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script src="js/payment.js"></script>
+    <script src="js/wallet.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof loadHeader === 'function') loadHeader();
+            if (typeof loadFooter === 'function') loadFooter();
+            if (typeof loadWallet === 'function') loadWallet(); // এটি এখন কাজ করবে
+        });
+    </script>
+</body>
+</html>

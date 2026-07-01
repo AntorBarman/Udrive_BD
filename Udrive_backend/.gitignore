@@ -1,0 +1,4 @@
+node_modules/
+Udrive_backend/node_modules/
+.env
+Udrive_backend/.env

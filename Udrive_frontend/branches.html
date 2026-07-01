@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Branches - Udrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/branches.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="branches-page">
+        <div class="container">
+            <div class="branches-header">
+                <h1>Our Branches Across Bangladesh</h1>
+                <p>Find a Udrive branch near you for convenient car pickup and return</p>
+            </div>
+
+            <div class="branches-map" style="margin-bottom: 40px;">
+                <div id="map" style="height: 450px; width: 100%; border-radius: 12px; z-index: 1; border: 2px solid #e2e8f0;"></div>
+                
+                <div class="map-legend">
+                    <h4>Legend</h4>
+                    <div class="legend-item">
+                        <span class="legend-icon active"></span>
+                        <span>Active Branch</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-icon coming-soon"></span>
+                        <span>Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="branches-grid">
+                <div class="branch-card">
+                    <div class="branch-header">
+                        <div class="branch-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Dhaka - Gulshan</h3>
+                        <span class="branch-status active">Active</span>
+                    </div>
+                    <div class="branch-info">
+                        <p><i class="fas fa-phone"></i> +880 1711-223344</p>
+                        <p><i class="fas fa-clock"></i> 8:00 AM - 10:00 PM</p>
+                        <p><i class="fas fa-map-pin"></i> Road 12, Block C, Gulshan 1, Dhaka 1212</p>
+                    </div>
+                    <div class="branch-services">
+                        <span><i class="fas fa-wifi"></i> Free WiFi</span>
+                        <span><i class="fas fa-parking"></i> Parking</span>
+                        <span><i class="fas fa-coffee"></i> Lounge</span>
+                    </div>
+                    <button class="btn btn-outline btn-block" onclick="selectBranch('Gulshan')">Select This Branch</button>
+                </div>
+
+                <div class="branch-card">
+                    <div class="branch-header">
+                        <div class="branch-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Dhaka - Banani</h3>
+                        <span class="branch-status active">Active</span>
+                    </div>
+                    <div class="branch-info">
+                        <p><i class="fas fa-phone"></i> +880 1711-223355</p>
+                        <p><i class="fas fa-clock"></i> 8:00 AM - 10:00 PM</p>
+                        <p><i class="fas fa-map-pin"></i> Road 11, Block F, Banani, Dhaka 1213</p>
+                    </div>
+                    <div class="branch-services">
+                        <span><i class="fas fa-wifi"></i> Free WiFi</span>
+                        <span><i class="fas fa-parking"></i> Parking</span>
+                        <span><i class="fas fa-car"></i> Valet</span>
+                    </div>
+                    <button class="btn btn-outline btn-block" onclick="selectBranch('Banani')">Select This Branch</button>
+                </div>
+
+                <div class="branch-card">
+                    <div class="branch-header">
+                        <div class="branch-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Chittagong</h3>
+                        <span class="branch-status active">Active</span>
+                    </div>
+                    <div class="branch-info">
+                        <p><i class="fas fa-phone"></i> +880 1811-223366</p>
+                        <p><i class="fas fa-clock"></i> 9:00 AM - 9:00 PM</p>
+                        <p><i class="fas fa-map-pin"></i> Agrabad Commercial Area, Chittagong</p>
+                    </div>
+                    <div class="branch-services">
+                        <span><i class="fas fa-wifi"></i> Free WiFi</span>
+                        <span><i class="fas fa-parking"></i> Parking</span>
+                    </div>
+                    <button class="btn btn-outline btn-block" onclick="selectBranch('Chittagong')">Select This Branch</button>
+                </div>
+
+                <div class="branch-card">
+                    <div class="branch-header">
+                        <div class="branch-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Sylhet</h3>
+                        <span class="branch-status active">Active</span>
+                    </div>
+                    <div class="branch-info">
+                        <p><i class="fas fa-phone"></i> +880 1711-223377</p>
+                        <p><i class="fas fa-clock"></i> 9:00 AM - 8:00 PM</p>
+                        <p><i class="fas fa-map-pin"></i> Zindabazar, Sylhet 3100</p>
+                    </div>
+                    <div class="branch-services">
+                        <span><i class="fas fa-wifi"></i> Free WiFi</span>
+                        <span><i class="fas fa-parking"></i> Parking</span>
+                    </div>
+                    <button class="btn btn-outline btn-block" onclick="selectBranch('Sylhet')">Select This Branch</button>
+                </div>
+
+                <div class="branch-card">
+                    <div class="branch-header">
+                        <div class="branch-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Khulna</h3>
+                        <span class="branch-status active">Active</span>
+                    </div>
+                    <div class="branch-info">
+                        <p><i class="fas fa-phone"></i> +880 1711-223388</p>
+                        <p><i class="fas fa-clock"></i> 9:00 AM - 8:00 PM</p>
+                        <p><i class="fas fa-map-pin"></i> Sonadanga R/A, Khulna 9100</p>
+                    </div>
+                    <div class="branch-services">
+                        <span><i class="fas fa-wifi"></i> Free WiFi</span>
+                        <span><i class="fas fa-parking"></i> Parking</span>
+                    </div>
+                    <button class="btn btn-outline btn-block" onclick="selectBranch('Khulna')">Select This Branch</button>
+                </div>
+
+                <div class="branch-card">
+                    <div class="branch-header">
+                        <div class="branch-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Rajshahi</h3>
+                        <span class="branch-status active">Active</span>
+                    </div>
+                    <div class="branch-info">
+                        <p><i class="fas fa-phone"></i> +880 1711-223399</p>
+                        <p><i class="fas fa-clock"></i> 9:00 AM - 8:00 PM</p>
+                        <p><i class="fas fa-map-pin"></i> Shaheb Bazar, Rajshahi 6000</p>
+                    </div>
+                    <div class="branch-services">
+                        <span><i class="fas fa-wifi"></i> Free WiFi</span>
+                        <span><i class="fas fa-parking"></i> Parking</span>
+                    </div>
+                    <button class="btn btn-outline btn-block" onclick="selectBranch('Rajshahi')">Select This Branch</button>
+                </div>
+            </div>
+
+            <div class="coming-soon">
+                <h2 style="margin-top: 40px; margin-bottom: 20px;">Coming Soon</h2>
+                <div class="coming-soon-grid">
+                    <div class="coming-soon-card">
+                        <h4>Cox's Bazar</h4>
+                        <p>Opening in Q2 2024</p>
+                    </div>
+                    <div class="coming-soon-card">
+                        <h4>Bogura</h4>
+                        <p>Opening in Q3 2024</p>
+                    </div>
+                    <div class="coming-soon-card">
+                        <h4>Barisal</h4>
+                        <p>Opening in Q4 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load Header and Footer (if these functions exist in main.js/utils.js)
+            if (typeof loadHeader === 'function') loadHeader();
+            if (typeof loadFooter === 'function') loadFooter();
+            
+            // Initialize the Map
+            initBranchesPage();
+        });
+
+        // 🚀 FULLY WORKING MAP LOGIC 🚀
+        function initBranchesPage() {
+            // Check if map container exists
+            var mapContainer = document.getElementById('map');
+            if (!mapContainer) return;
+
+            // Initialize map centered at Bangladesh
+            var map = L.map('map').setView([23.6850, 90.3563], 7); // Center of BD
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Define our active branch locations with coordinates
+            var branches = [
+                { name: "Dhaka - Gulshan", lat: 23.7937, lng: 90.4066 },
+                { name: "Dhaka - Banani", lat: 23.7940, lng: 90.4043 },
+                { name: "Chittagong", lat: 22.3275, lng: 91.8123 },
+                { name: "Sylhet", lat: 24.8965, lng: 91.8700 },
+                { name: "Khulna", lat: 22.8456, lng: 89.5403 },
+                { name: "Rajshahi", lat: 24.3636, lng: 88.6241 }
+            ];
+
+            // Add a marker for each branch
+            branches.forEach(function(branch) {
+                var marker = L.marker([branch.lat, branch.lng]).addTo(map);
+                
+                // Add popup text when marker is clicked
+                marker.bindPopup(`
+                    <div style="text-align: center;">
+                        <b style="color: #2563eb; font-size: 1.1em;">${branch.name}</b><br>
+                        <span style="color: #059669; font-weight: bold;">Active Branch</span>
+                    </div>
+                `);
+            });
+        }
+
+        // Branch Selection Button Action
+        function selectBranch(branchName) {
+            alert(`You have selected the ${branchName} branch.`);
+            // Optional: Save preferred branch to localStorage
+            // localStorage.setItem('preferredBranch', branchName);
+        }
+    </script>
+</body>
+</html>

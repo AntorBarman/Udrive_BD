@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Details - Udrive</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .car-details-page {
+            padding: 30px 0 60px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .breadcrumb a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .car-details-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        @media (max-width: 992px) {
+            .car-details-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Car Main */
+        .car-main {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            min-height: 400px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 380px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            background: #f1f1f1;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s;
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .thumbnail {
+            height: 75px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .thumbnail.active {
+            border-color: #2563eb;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .car-info h1 {
+            font-size: 1.8rem;
+            color: #1e293b;
+            margin: 20px 0 10px;
+        }
+
+        .car-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            color: #fbbf24;
+        }
+
+        .car-specs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+            padding: 18px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .spec-item i {
+            color: #2563eb;
+            width: 18px;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .features-list span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .features-list i {
+            color: #10b981;
+        }
+
+        /* Booking Widget */
+        .booking-widget {
+            position: sticky;
+            top: 20px;
+        }
+
+        .widget-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 15px;
+        }
+
+        .widget-card h3 {
+            margin-bottom: 20px;
+            color: #1e293b;
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #475569;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .price-summary {
+            border-top: 1px solid #e2e8f0;
+            padding: 16px 0;
+            margin-bottom: 16px;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .price-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #1e293b;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 13px 26px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            display: block;
+            text-align: center;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+            margin-top: 12px;
+        }
+
+        /* Owner Card */
+        .owner-card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .owner-info {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .owner-avatar img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Similar Cars */
+        .similar-cars {
+            margin-top: 40px;
+        }
+
+        .similar-cars-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .similar-cars-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .similar-car-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .similar-car-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .similar-car-image img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .similar-car-info {
+            padding: 15px;
+        }
+
+        .similar-car-info h4 {
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        /* Header & Footer */
+        header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #0f766e;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #475569;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        footer {
+            background: #1e293b;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header"></div>
+
+    <div class="car-details-page">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a> &gt;
+                <a href="search.html">Search</a> &gt;
+                <span id="currentCarName">Loading...</span>
+            </div>
+
+            <div class="car-details-layout">
+                <!-- Car Main (dynamically filled) -->
+                <div class="car-main" id="carMain">
+                    <div style="text-align:center; padding:80px 20px;">
+                        <i class="fas fa-spinner fa-spin fa-3x" style="color:#2563eb;"></i>
+                        <h3 style="margin-top:20px; color:#475569;">Loading Car Details...</h3>
+                    </div>
+                </div>
+
+                <!-- Booking Widget (dynamically filled) -->
+                <div class="booking-widget" id="bookingWidget">
+                    <div class="widget-card" style="text-align:center; padding:30px;">
+                        <i class="fas fa-spinner fa-spin" style="color:#2563eb;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Similar Cars (dynamically filled) -->
+            <div class="similar-cars" id="similarCars"></div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+
+    <script>
+        // car-details.html — Fixed JavaScript (Overlap Bug Fixed)
+        // Pickup == Return time conflict resolved
+        // ============================================================
+
+        let currentCar = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHeader();
+            loadFooter();
+            loadCarDetails();
+        });
+
+        // ── Helper: Local time "YYYY-MM-DDTHH:mm" format ─────────────
+        function getNowFormatted() {
+            const now = new Date();
+            const pad = n => String(n).padStart(2, '0');
+            return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+        }
+
+        // ============================================================
+        // ✅ CORE FIX: Overlap Check Logic
+        // 
+        // সমস্যা ছিল:
+        //   .lte('pickup_date', now) + .gte('return_date', now)
+        //   এটা শুধু "এখন চলছে এমন booking" check করত।
+        //   কিন্তু নতুন booking এর date range এর সাথে overlap check করত না।
+        //
+        // নতুন overlap formula:
+        //   existingBooking.pickup_date  <  newBooking.return_date
+        //   AND
+        //   existingBooking.return_date  >  newBooking.pickup_date
+        //
+        //   (<= নয়, strictly < এবং > ব্যবহার করা হয়েছে)
+        //   কারণ: A রিটার্ন করছে 10:00 AM, B পিকাপ নিচ্ছে 10:00 AM
+        //   এটা valid — same exact time conflict নয়।
+        // ============================================================
+
+        // ১. গাড়িটি এই মুহূর্তে বুকড কিনা (car-details page load এ check)
+        async function isCarCurrentlyBooked(carId) {
+            try {
+                if (!window.supabaseClient) return false;
+
+                const now = getNowFormatted();
+                console.log("🕐 Checking if car is currently on trip:", carId, "at:", now);
+
+                // এই মুহূর্তে active trip আছে কিনা
+                const { data, error } = await window.supabaseClient
+                    .from('bookings')
+                    .select('car_id, pickup_date, return_date, status')
+                    .eq('car_id', String(carId))
+                    .in('status', ['confirmed'])        // শুধু confirmed trip check
+                    .lt('pickup_date', now)             // trip শুরু হয়ে গেছে (strictly less than)
+                    .gt('return_date', now)             // trip এখনো শেষ হয়নি (strictly greater than)
+                    .limit(1);
+
+                if (error) {
+                    console.warn("Booking check error:", error.message);
+                    return false;
+                }
+
+                console.log("📋 Currently on trip:", data && data.length > 0, data);
+                return data && data.length > 0;
+
+            } catch (err) {
+                console.warn("isCarCurrentlyBooked failed:", err);
+                return false;
+            }
+        }
+
+        // ২. ✅ নতুন: নির্দিষ্ট date range এ overlap আছে কিনা check
+        async function checkDateRangeOverlap(carId, newPickup, newReturn) {
+            try {
+                if (!window.supabaseClient) return false;
+                if (!newPickup || !newReturn) return false;
+
+                console.log(`🔍 Checking overlap for car ${carId}: ${newPickup} → ${newReturn}`);
+
+                // Overlap condition:
+                //   existing.pickup_date  < newReturn   (existing শুরু হয় নতুন শেষের আগে)
+                //   AND
+                //   existing.return_date  > newPickup   (existing শেষ হয় নতুন শুরুর পরে)
+                //
+                // Strictly < এবং > ব্যবহার:
+                //   যদি A return = 10:00 এবং B pickup = 10:00 হয় → overlap নেই (valid)
+                //   যদি A return = 10:30 এবং B pickup = 10:00 হয় → overlap আছে (invalid)
+
+                const { data, error } = await window.supabaseClient
+                    .from('bookings')
+                    .select('car_id, pickup_date, return_date, status')
+                    .eq('car_id', String(carId))
+                    .in('status', ['pending', 'confirmed'])
+                    .lt('pickup_date', newReturn)       // existing pickup < নতুন return
+                    .gt('return_date', newPickup)       // existing return > নতুন pickup
+                    .limit(1);
+
+                if (error) {
+                    console.warn("Overlap check error:", error.message);
+                    return false;
+                }
+
+                console.log("📋 Overlap check result:", data);
+
+                if (data && data.length > 0) {
+                    console.warn("⚠️ Overlap found:", data[0]);
+                    return true; // conflict আছে
+                }
+
+                return false; // conflict নেই
+
+            } catch (err) {
+                console.warn("checkDateRangeOverlap failed:", err);
+                return false;
+            }
+        }
+
+        // ── Car Details Load ──────────────────────────────────────────
+        async function loadCarDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const carId = params.get('id') || params.get('car_id');
+
+            if (!carId) {
+                showMainError("কোনো গাড়ি নির্বাচন করা হয়নি!");
+                return;
+            }
+
+            try {
+                if (!window.supabaseClient) throw new Error("Supabase connected নেই!");
+
+                const { data: carData, error } = await window.supabaseClient
+                    .from('cars')
+                    .select('*')
+                    .eq('id', carId)
+                    .single();
+
+                if (error) throw error;
+                if (!carData) throw new Error("Car not found in database.");
+
+                // এই মুহূর্তে trip চলছে কিনা
+                const isOnTrip = await isCarCurrentlyBooked(carId);
+                if (isOnTrip) {
+                    showBookedMessage("এই গাড়িটি এখন একটি সক্রিয় ট্রিপে আছে।");
+                    return;
+                }
+
+                // Images parse
+                let images = ['https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800'];
+                if (carData.images) {
+                    if (Array.isArray(carData.images) && carData.images.length > 0) {
+                        images = carData.images.map(img =>
+                            typeof img === 'string' ? img : (img.data || img.url || images[0])
+                        ).filter(Boolean);
+                    } else if (typeof carData.images === 'string') {
+                        try { images = JSON.parse(carData.images); } catch { images = [carData.images]; }
+                    }
+                } else if (carData.image_url) {
+                    images = [carData.image_url];
+                }
+
+                // Owner name
+                let ownerName = "Udrive Partner";
+                if (carData.user_id) {
+                    const { data: earnerData } = await window.supabaseClient
+                        .from('earner_applications')
+                        .select('name')
+                        .eq('user_id', carData.user_id)
+                        .order('created_at', { ascending: false })
+                        .limit(1)
+                        .maybeSingle();
+                    if (earnerData?.name) ownerName = earnerData.name;
+                }
+
+                const ownerAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(ownerName)}&background=10b981&color=fff&size=100`;
+
+                currentCar = {
+                    id: carData.id,
+                    name: carData.name || `${carData.make || ''} ${carData.model || ''}`.trim(),
+                    price: parseFloat(carData.daily_rate) || 0,
+                    type: carData.type || 'Sedan',
+                    transmission: carData.transmission || 'Automatic',
+                    fuel: carData.fuel_type || 'Petrol',
+                    seats: parseInt(carData.seats) || 4,
+                    rating: parseFloat(carData.rating) || 5.0,
+                    location: carData.location || 'Dhaka',
+                    features: carData.features || ['AC', 'Music System', 'Bluetooth'],
+                    description: carData.description || 'No description provided.',
+                    owner: { name: ownerName, avatar: ownerAvatar },
+                    images: images
+                };
+
+                renderCarMain(currentCar);
+                renderBookingWidget(currentCar);
+                setDefaultDates();
+                loadSimilarCars(carData.type, carData.id);
+
+            } catch (err) {
+                console.error("loadCarDetails error:", err);
+                showMainError("Failed to load car information." + err.message);
+            }
+        }
+
+        // ── Car Main Render ──────────────────────────────────────────
+        function renderCarMain(car) {
+            const safeImages = car.images.map(img =>
+                typeof img === 'string' ? img.replace(/"/g, '&quot;') : ''
+            ).filter(Boolean);
+
+            if (safeImages.length === 0)
+                safeImages.push('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800');
+
+            const thumbs = safeImages.map((img, i) => `
+        <div class="thumbnail ${i === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
+            <img src="${img}" alt="view ${i + 1}"
+                 onerror="this.src='https://via.placeholder.com/200x80'">
+        </div>`
+            ).join('');
+
+            document.getElementById('carMain').innerHTML = `
+        <div class="car-gallery">
+            <div class="main-image">
+                <img id="mainImg" src="${safeImages[0]}" alt="${car.name}"
+                     onerror="this.src='https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800'">
+            </div>
+            <div class="thumbnail-grid">${thumbs}</div>
+        </div>
+        <div class="car-info">
+            <h1>${car.name}</h1>
+            <div class="car-rating">
+                <i class="fas fa-star"></i>
+                <span style="font-size:1rem; font-weight:600;">${car.rating.toFixed(1)}</span>
+                <span style="color:#64748b; font-size:0.85rem;">(Verified)</span>
+            </div>
+            <div class="car-specs-grid">
+                <div class="spec-item"><i class="fas fa-user-friends"></i> ${car.seats} Seats</div>
+                <div class="spec-item"><i class="fas fa-cog"></i> ${car.transmission}</div>
+                <div class="spec-item"><i class="fas fa-gas-pump"></i> ${car.fuel}</div>
+                <div class="spec-item"><i class="fas fa-car"></i> ${car.type}</div>
+                <div class="spec-item"><i class="fas fa-map-marker-alt"></i> ${car.location}</div>
+            </div>
+            <div style="margin-bottom:20px;">
+                <h3 style="margin-bottom:10px; color:#1e293b;">Description</h3>
+                <p style="color:#475569; line-height:1.7;">${car.description}</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom:12px; color:#1e293b;">Features</h3>
+                <div class="features-list">
+                    ${(car.features || []).map(f =>
+                `<span><i class="fas fa-check"></i> ${f}</span>`
+            ).join('')}
+                </div>
+            </div>
+        </div>`;
+
+            document.getElementById('currentCarName').textContent = car.name;
+        }
+
+        function changeMainImage(src, el) {
+            document.getElementById('mainImg').src = src;
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // ── Booking Widget Render ────────────────────────────────────
+        function renderBookingWidget(car) {
+            const dailyRate = car.price || 0;
+            const hourlyRate = Math.round(dailyRate / 24);
+            const initHours = 24;
+            const serviceFee = 300;
+            const insurance = 500;
+            const initTotal = (hourlyRate * initHours) + serviceFee + insurance;
+
+            document.getElementById('bookingWidget').innerHTML = `
+        <div class="widget-card">
+            <h3><i class="fas fa-calendar-check" style="color:#2563eb; margin-right:8px;"></i>Book This Car</h3>
+            <div class="form-group">
+                <label>Pickup Date & Time</label>
+                <input type="datetime-local" id="pickupDate" onchange="onDateChange()">
+                <p id="pickupError" style="color:#ef4444; font-size:0.8rem; margin-top:4px; display:none;"></p>
+            </div>
+            <div class="form-group">
+                <label>Return Date & Time</label>
+                <input type="datetime-local" id="returnDate" onchange="onDateChange()">
+                <p id="returnError" style="color:#ef4444; font-size:0.8rem; margin-top:4px; display:none;"></p>
+            </div>
+
+            <!-- ✅ নতুন: Availability check status দেখানোর জায়গা -->
+            <div id="availabilityStatus" style="display:none; padding:10px 14px; border-radius:8px; margin-bottom:12px; font-size:0.85rem; font-weight:600;"></div>
+
+            <div class="form-group">
+                <label>Pickup Location</label>
+                <select id="pickupLocation">
+                    <option value="${car.location}">${car.location} (Default)</option>
+                    <option value="Dhaka - Gulshan">Dhaka - Gulshan</option>
+                    <option value="Dhaka - Banani">Dhaka - Banani</option>
+                    <option value="Dhaka - Dhanmondi">Dhaka - Dhanmondi</option>
+                    <option value="Chittagong">Chittagong</option>
+                    <option value="Sylhet">Sylhet</option>
+                    <option value="Rajshahi">Rajshahi</option>
+                </select>
+            </div>
+            <div class="price-summary">
+                <div class="price-item"><span>Hourly Rate</span><span>৳${hourlyRate}/hour</span></div>
+                <div class="price-item"><span>Duration</span><span id="displayHours">${initHours} Hours</span></div>
+                <div class="price-item"><span>Service Fee</span><span>৳${serviceFee}</span></div>
+                <div class="price-item"><span>Insurance</span><span>৳${insurance}</span></div>
+                <div class="price-total"><span>Total</span><span id="totalPrice">৳${initTotal}</span></div>
+            </div>
+            <button class="btn btn-primary" id="bookNowBtn">
+                <i class="fas fa-car"></i> Book Now
+            </button>
+        </div>
+        <div class="owner-card">
+            <div class="owner-info">
+                <div class="owner-avatar">
+                    <img src="${car.owner.avatar}" alt="Owner"
+                         onerror="this.src='https://via.placeholder.com/55'">
+                </div>
+                <div>
+                    <h5 style="color:#1e293b; margin-bottom:4px;">${car.owner.name}</h5>
+                    <p style="color:#10b981; font-size:0.85rem;">
+                        <i class="fas fa-check-circle"></i> Verified Owner
+                    </p>
+                </div>
+            </div>
+            <button class="btn btn-outline">
+                <i class="fas fa-envelope"></i> Message Owner
+            </button>
+        </div>`;
+
+            document.getElementById('bookNowBtn').addEventListener('click', handleBooking);
+        }
+
+        // ── ✅ Date Change Handler (Overlap check UI) ─────────────────
+        let overlapCheckTimer = null;
+
+        async function onDateChange() {
+            const pEl = document.getElementById('pickupDate');
+            const rEl = document.getElementById('returnDate');
+            const p = pEl?.value;
+            const r = rEl?.value;
+
+            // Error divs reset
+            hideError('pickupError');
+            hideError('returnError');
+            hideAvailabilityStatus();
+
+            if (!p || !r) return;
+
+            const pTime = new Date(p);
+            const rTime = new Date(r);
+
+            // ১. Return time must be after pickup
+            if (rTime <= pTime) {
+                showFieldError('returnError', '⚠️ Return time must be after pickup time.');
+                return;
+            }
+
+            // ২. Minimum 1 hour
+            const diffHours = (rTime - pTime) / (1000 * 60 * 60);
+            if (diffHours < 1) {
+                showFieldError('returnError', '⚠️ Minimum booking duration is 1 hour.');
+                return;
+            }
+
+            // Price calculate
+            if (currentCar) calcPrice(Math.round(currentCar.price / 24), p, r);
+
+            // ৩. ✅ Debounced overlap check (500ms wait)
+            clearTimeout(overlapCheckTimer);
+            overlapCheckTimer = setTimeout(async () => {
+                if (!currentCar) return;
+                showAvailabilityStatus('checking');
+
+                const hasOverlap = await checkDateRangeOverlap(currentCar.id, p, r);
+
+                if (hasOverlap) {
+                    showAvailabilityStatus('unavailable');
+                    // Book Now button disable করো
+                    const btn = document.getElementById('bookNowBtn');
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.5';
+                        btn.title = 'The car is not available at this time';
+                    }
+                } else {
+                    showAvailabilityStatus('available');
+                    // Book Now button enable করো
+                    const btn = document.getElementById('bookNowBtn');
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.title = '';
+                    }
+                }
+            }, 500);
+        }
+
+        // ── Availability Status UI ────────────────────────────────────
+        function showAvailabilityStatus(type) {
+            const el = document.getElementById('availabilityStatus');
+            if (!el) return;
+            el.style.display = 'block';
+
+            if (type === 'checking') {
+                el.style.background = '#f1f5f9';
+                el.style.color = '#475569';
+                el.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking availability...';
+            } else if (type === 'available') {
+                el.style.background = '#d1fae5';
+                el.style.color = '#065f46';
+                el.innerHTML = '<i class="fas fa-check-circle"></i>  The car is available at this time!';
+            } else if (type === 'unavailable') {
+                el.style.background = '#fee2e2';
+                el.style.color = '#991b1b';
+                el.innerHTML = '<i class="fas fa-times-circle"></i> Someone else has booked the car at this time. Please choose another time.';
+            }
+        }
+
+        function hideAvailabilityStatus() {
+            const el = document.getElementById('availabilityStatus');
+            if (el) el.style.display = 'none';
+        }
+
+        function showFieldError(id, msg) {
+            const el = document.getElementById(id);
+            if (el) { el.textContent = msg; el.style.display = 'block'; }
+        }
+
+        function hideError(id) {
+            const el = document.getElementById(id);
+            if (el) { el.textContent = ''; el.style.display = 'none'; }
+        }
+
+        // ── Price Calculation ────────────────────────────────────────
+        function calcPrice(hourlyRate, pDate, rDate) {
+            if (!pDate || !rDate) return;
+            const pTime = new Date(pDate);
+            const rTime = new Date(rDate);
+            if (rTime <= pTime) return;
+
+            const hours = Math.max(1, Math.ceil((rTime - pTime) / (1000 * 60 * 60)));
+            const serviceFee = 300;
+            const insurance = 500;
+            const total = (hours * hourlyRate) + serviceFee + insurance;
+
+            const dEl = document.getElementById('displayHours');
+            const tEl = document.getElementById('totalPrice');
+            if (dEl) dEl.textContent = `${hours} Hours`;
+            if (tEl) tEl.textContent = `৳${total}`;
+        }
+
+        function setDefaultDates() {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            const nowStr = now.toISOString().slice(0, 16);
+
+            const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+            const tomStr = tomorrow.toISOString().slice(0, 16);
+
+            const pEl = document.getElementById('pickupDate');
+            const rEl = document.getElementById('returnDate');
+            if (pEl) { pEl.min = nowStr; pEl.value = nowStr; }
+            if (rEl) { rEl.min = nowStr; rEl.value = tomStr; }
+        }
+
+        // ── Booking Handler ──────────────────────────────────────────
+        async function handleBooking() {
+            const userData = localStorage.getItem('udrive_user');
+            if (!userData) {
+                alert('Please login to book a car');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const btn = document.getElementById('bookNowBtn');
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+            btn.disabled = true;
+
+            try {
+                const user = JSON.parse(userData);
+                if (!window.supabaseClient) throw new Error("Database connection missing!");
+
+                const pDate = document.getElementById('pickupDate')?.value;
+                const rDate = document.getElementById('returnDate')?.value;
+                const loc = document.getElementById('pickupLocation')?.value || 'Dhaka';
+
+                if (!pDate || !rDate) throw new Error("Please select pickup and return dates first.");
+
+                const pTime = new Date(pDate);
+                const rTime = new Date(rDate);
+
+                // ১. Basic date validation
+                if (rTime <= pTime) throw new Error("Return time must be after pickup time!");
+
+                const diffHours = (rTime - pTime) / (1000 * 60 * 60);
+                if (diffHours < 1) throw new Error("Minimum booking duration is 1 hour.");
+
+                // ২. ✅ Final overlap check (booking submit এর ঠিক আগে)
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking availability...';
+                const hasOverlap = await checkDateRangeOverlap(currentCar.id, pDate, rDate);
+
+                if (hasOverlap) {
+                    // Availability status দেখাও
+                    showAvailabilityStatus('unavailable');
+                    throw new Error("Someone else has booked the car at this time!\n\nPlease choose another time.");
+                }
+
+                // ৩. KYC Check
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking KYC...';
+                const { data: kycData, error: kycError } = await window.supabaseClient
+                    .from('kyc_verifications')
+                    .select('status')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false })
+                    .limit(1);
+
+                if (kycError) throw kycError;
+
+                if (!kycData || kycData.length === 0) {
+                    if (confirm("⚠️ KYC Verification Required.\nVerify identity now?")) {
+                        window.location.href = 'kyc-verification.html?ref=booking';
+                    }
+                    throw new Error("KYC required");
+                }
+
+                const kycStatus = String(kycData[0]?.status || 'pending').trim().toLowerCase();
+                if (kycStatus === 'pending') {
+                    alert("⏳ Your KYC is UNDER REVIEW. Please wait for Admin approval.");
+                    window.location.href = 'kyc-verification.html';
+                    throw new Error("KYC pending");
+                }
+                if (!['verified', 'approved', 'active', 'accepted'].includes(kycStatus)) {
+                    alert(`❌ KYC status: ${kycStatus.toUpperCase()}. Please contact support.`);
+                    window.location.href = 'kyc-verification.html';
+                    throw new Error("KYC failed");
+                }
+
+                // ৪. Price calculation
+                const hours = Math.max(1, Math.ceil((rTime - pTime) / (1000 * 60 * 60)));
+                const hourlyRate = Math.round(currentCar.price / 24);
+                const serviceFee = 300;
+                const insurance = 500;
+                const totalAmount = (hourlyRate * hours) + serviceFee + insurance;
+
+                // ৫. sessionStorage এ save করে reservation page এ যাও
+                const bookingDataToPass = {
+                    carId: String(currentCar.id),
+                    carName: currentCar.name,
+                    pickupDate: pDate,
+                    returnDate: rDate,
+                    pickupLocation: loc,
+                    totalPrice: totalAmount,
+                    finalTotal: totalAmount,
+                    hourlyRate: hourlyRate,
+                    hours: hours,
+                    carDetails: {
+                        images: currentCar.images || [],
+                        seats: currentCar.seats,
+                        transmission: currentCar.transmission
+                    }
+                };
+
+                console.log("✅ Booking data saved:", bookingDataToPass);
+                sessionStorage.setItem('currentBooking', JSON.stringify(bookingDataToPass));
+                window.location.href = 'reservation.html';
+
+            } catch (err) {
+                const ignoredErrors = ['KYC required', 'KYC pending', 'KYC failed'];
+                if (!ignoredErrors.includes(err.message)) {
+                    alert("⚠️ " + err.message);
+                }
+                btn.innerHTML = orig;
+                btn.disabled = false;
+            }
+        }
+
+        // ── Similar Cars ─────────────────────────────────────────────
+        async function loadSimilarCars(carType, currentId) {
+            const container = document.getElementById('similarCars');
+            if (!container) return;
+
+            try {
+                const { data: similar } = await window.supabaseClient
+                    .from('cars')
+                    .select('id, name, make, model, daily_rate, images, image_url')
+                    .eq('status', 'approved')
+                    .eq('type', carType)
+                    .neq('id', currentId)
+                    .limit(3);
+
+                if (!similar || similar.length === 0) { container.innerHTML = ''; return; }
+
+                container.innerHTML = `
+            <h2 style="margin-bottom:20px; color:#1e293b;">Similar Cars</h2>
+            <div class="similar-cars-grid">
+                ${similar.map(c => {
+                    let img = 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400';
+                    if (c.images && Array.isArray(c.images) && c.images.length > 0)
+                        img = c.images[0]?.data || c.images[0] || img;
+                    else if (c.image_url) img = c.image_url;
+
+                    const name = c.name || `${c.make || ''} ${c.model || ''}`.trim();
+                    const hourly = Math.round((parseFloat(c.daily_rate) || 0) / 24);
+
+                    return `
+                    <div class="similar-car-card" onclick="location.href='car-details.html?id=${c.id}'">
+                        <div class="similar-car-image">
+                            <img src="${img}" alt="${name}"
+                                 onerror="this.src='https://via.placeholder.com/400x160'">
+                        </div>
+                        <div class="similar-car-info">
+                            <h4>${name}</h4>
+                            <div style="margin-top:8px; font-weight:700; color:#2563eb;">
+                                ৳${hourly}/hour
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>`;
+            } catch (err) {
+                console.warn("Similar cars load failed:", err.message);
+                container.innerHTML = '';
+            }
+        }
+
+        // ── Error & Booked UI ────────────────────────────────────────
+        function showMainError(msg) {
+            document.getElementById('carMain').innerHTML = `
+        <div style="text-align:center; padding:80px 20px;">
+            <i class="fas fa-exclamation-triangle" style="font-size:3.5rem; color:#ef4444;"></i>
+            <h2 style="margin-top:15px; color:#1e293b;">Error</h2>
+            <p style="color:#64748b; margin:12px 0;">${msg}</p>
+            <a href="search.html" style="display:inline-block; margin-top:15px; padding:12px 28px;
+                background:#2563eb; color:white; border-radius:8px; text-decoration:none; font-weight:600;">
+                <i class="fas fa-search"></i> Browse Cars
+            </a>
+        </div>`;
+            document.getElementById('bookingWidget').innerHTML = '';
+        }
+
+        function showBookedMessage(reason) {
+            document.getElementById('carMain').innerHTML = `
+        <div style="text-align:center; padding:80px 20px;">
+            <i class="fas fa-calendar-times" style="font-size:3.5rem; color:#ef4444;"></i>
+            <h2 style="margin-top:15px; color:#1e293b;">The car is Unavailable</h2>
+            <p style="color:#64748b; margin:12px 0; line-height:1.6;">${reason}</p>
+            <a href="search.html" style="display:inline-block; margin-top:15px; padding:12px 28px;
+                background:#2563eb; color:white; border-radius:8px; text-decoration:none; font-weight:600;">
+                <i class="fas fa-search"></i> Please choose another time
+            </a>
+        </div>`;
+            document.getElementById('bookingWidget').innerHTML = `
+        <div class="widget-card" style="text-align:center;">
+            <i class="fas fa-ban" style="font-size:2rem; color:#ef4444; margin-bottom:12px;"></i>
+            <h4 style="color:#1e293b; margin-bottom:8px;">Cannot be booked at the moment</h4>
+            <p style="color:#64748b; font-size:0.9rem;">${reason}</p>
+        </div>`;
+        }
+
+        // ── Header & Footer ──────────────────────────────────────────
+        function loadHeader() {
+            const user = localStorage.getItem('udrive_user');
+            document.getElementById('header').innerHTML = `
+        <header>
+            <div class="container">
+                <nav>
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-car" style="color:#ef4444; margin-right:5px;"></i> Udrive
+                    </a>
+                    <div class="nav-links">
+                        <a href="search.html">Find Cars</a>
+                        ${user
+                    ? `<a href="bookings.html">My Bookings</a>
+                               <a href="#" onclick="logout(event)" style="color:#ef4444;">Logout</a>`
+                    : `<a href="login.html" style="color:#0f766e; font-weight:bold;">Login</a>`
+                }
+                    </div>
+                </nav>
+            </div>
+        </header>`;
+        }
+
+        function loadFooter() {
+            document.getElementById('footer').innerHTML = `
+        <footer>
+            <div class="container">
+                <p>&copy; 2026 Udrive Bangladesh. All rights reserved.</p>
+            </div>
+        </footer>`;
+        }
+
+        function logout(e) {
+            e.preventDefault();
+            localStorage.removeItem('udrive_user');
+            if (window.supabaseClient) window.supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udrive - Self-Drive Car Rental in Bangladesh</title>
+    <link rel="stylesheet" href="css/index-page.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* =============================================
+           HERO SECTION - YOUR EXACT DESIGN
+           ============================================= */
+        .hero {
+            position: relative;
+            padding: 120px 0 160px;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1920&q=80') center/cover;
+            text-align: center;
+            color: white;
+        }
+
+        .trust-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .trust-badge i {
+            color: #4ade80;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- Hero Buttons --- */
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn-primary {
+            padding: 12px 32px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        /* --- Live Button (Your Design) --- */
+        .btn-live {
+            background: white;
+            color: #333;
+            font-weight: bold;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-live:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 59, 48, 0.2);
+            color: #ff3b30;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #ff3b30;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+        }
+
+        /* --- Floating Search Bar --- */
+        .search-bar {
+            margin-top: -80px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-form {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: white;
+            transition: border 0.3s ease;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: #2563eb;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-search {
+            padding: 12px 24px;
+            border-radius: 6px;
+            height: 45px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-search:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        /* --- Features Section --- */
+        .features {
+            padding: 60px 0;
+            background: #f9f9fb;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            color: #1e293b;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: #2563eb;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+
+        .feature-card p {
+            color: #64748b;
+        }
+
+        /* --- Popular Cars --- */
+        .popular-cars {
+            padding: 60px 0;
+        }
+
+        .cars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .car-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .car-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        .car-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .car-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .verified-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .verified-badge i {
+            margin-right: 4px;
+        }
+
+        .car-info {
+            padding: 20px;
+        }
+
+        .car-info h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: #1e293b;
+        }
+
+        .car-specs {
+            display: flex;
+            gap: 15px;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .car-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .price span {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #1d4ed8;
+        }
+
+        /* --- How It Works --- */
+        .how-it-works {
+            padding: 60px 0;
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .how-it-works .section-title {
+            color: white;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: #94a3b8;
+        }
+
+        /* --- Navigation Live Button --- */
+        .nav-live {
+            text-decoration: none;
+            color: #ff3b30;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-live .nav-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff3b30;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* --- Header --- */
+        header {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-center a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .nav-center a:hover {
+            color: #2563eb;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-login {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: #f1f5f9;
+        }
+
+        .btn-signup {
+            background: #2563eb;
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-signup:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .header-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .header-link:hover {
+            color: #2563eb;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 992px) {
+            .form-row {
+                flex-wrap: wrap;
+            }
+            .form-group {
+                flex: 1 1 calc(50% - 15px);
+                min-width: 0;
+            }
+            .btn-search {
+                flex: 1 1 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn-primary, .btn-live {
+                width: 100%;
+                justify-content: center;
+            }
+            .nav-center {
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .auth-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .form-group {
+                flex: 1 1 100%;
+            }
+            .search-bar {
+                margin-top: -40px;
+            }
+            .search-form {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header"></div>
+
+    <!-- ============================================= -->
+    <!-- HERO SECTION -->
+    <!-- ============================================= -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="trust-badge">
+                    <i class="fas fa-shield-check"></i> 100% Secure & Verified Cars
+                </div>
+                <h1>Drive Freedom with Udrive</h1>
+                <p>Bangladesh's first self-drive car rental platform. Book verified cars instantly for your next adventure.</p>
+                
+                <div class="hero-buttons">
+                    <a href="search.html" class="btn-primary">
+                        <i class="fas fa-search"></i> Find a Car
+                    </a>
+                    <a href="live-dashboard.html" class="btn-live">
+                        <span class="live-dot"></span> Live Fleet Status
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- SEARCH BAR (Floating) -->
+    <!-- ============================================= -->
+    <section class="search-bar">
+        <div class="container">
+            <div class="search-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-map-marker-alt"></i> Pickup Location</label>
+                        <select id="homeLocation">
+                            <option value="">Select City</option>
+                            <option value="Dhaka">Dhaka</option>
+                            <option value="Chittagong">Chittagong</option>
+                            <option value="Sylhet">Sylhet</option>
+                            <option value="Khulna">Khulna</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Pickup Date</label>
+                        <input type="date" id="pickupDate">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Return Date</label>
+                        <input type="date" id="returnDate">
+                    </div>
+                    <button class="btn-search" onclick="searchCars()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- FEATURES SECTION -->
+    <!-- ============================================= -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose Udrive?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Fully Insured</h3>
+                    <p>Comprehensive insurance for every trip</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>24/7 Support</h3>
+                    <p>Round-the-clock customer service</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-car"></i>
+                    <h3>Verified Cars</h3>
+                    <p>Quality checked vehicles</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-tag"></i>
+                    <h3>Best Prices</h3>
+                    <p>Competitive rates, no hidden charges</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- POPULAR CARS -->
+    <!-- ============================================= -->
+    <section class="popular-cars">
+        <div class="container">
+            <h2 class="section-title">Popular Cars</h2>
+            <div class="cars-grid" id="popularCars">
+                <!-- Cars loaded dynamically -->
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="search.html" class="btn-secondary" style="padding: 10px 30px; border-radius: 8px; display: inline-block;">
+                    View All Cars
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================= -->
+    <!-- HOW IT WORKS -->
+    <!-- ============================================= -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How Udrive Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Book</h3>
+                    <p>Select car & time</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Verify</h3>
+                    <p>Upload documents</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Pay</h3>
+                    <p>Secure payment</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Drive</h3>
+                    <p>Pickup & enjoy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer"></div>
+
+    <script src="js/supabase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            setDefaultDates();
+            loadUserListedCars();
+        });
+
+        // =============================================
+        // HEADER
+        // =============================================
+        function loadHeader() {
+            const userStr = localStorage.getItem('udrive_user');
+            let user = null;
+            try { user = userStr ? JSON.parse(userStr) : null; } catch(e) { localStorage.removeItem('udrive_user'); }
+            
+            let authButtonsHtml = '';
+
+            if (user) {
+                const userName = user.user_metadata?.name || user.name || 'User';
+                const role = user.user_metadata?.role || user.role || 'renter';
+
+                if (role === 'earner') {
+                    authButtonsHtml = `
+                        <a href="earner-portal.html" class="header-link">Earner Portal</a>
+                        <a href="#" onclick="event.preventDefault(); forceLogout();" class="btn-login">Logout (${userName})</a>
+                    `;
+                } else {
+                    authButtonsHtml = `
+                        <a href="dashboard.html" class="header-link">Renter Dashboard</a>
+                        <a href="#" onclick="event.preventDefault(); forceLogout();" class="btn-login">Logout (${userName})</a>
+                    `;
+                }
+            } else {
+                authButtonsHtml = `
+                    <a href="login.html" class="btn-login">Login</a>
+                    <a href="register.html" class="btn-signup">Sign Up</a>
+                   
+                `;
+            }
+
+            document.getElementById('header').innerHTML = `
+                <header>
+                    <div class="container">
+                        <nav style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; flex-wrap: wrap; gap: 10px;">
+                            <a href="index.html" class="logo">
+                                <i class="fas fa-car-side"></i> Udrive
+                            </a>
+                            
+                            <div class="nav-center">
+                                <a href="functioning.html" class="nav-link">How it Works</a>
+                                <a href="search.html">Search Cars</a>
+                                <a href="live-dashboard.html" class="nav-live"><span class="nav-dot"></span> Live Fleet</a>
+                                <a href="branches.html">Branches</a>
+                            </div>
+
+                            <div class="auth-buttons">
+                                ${authButtonsHtml}
+                            </div>
+                        </nav>
+                    </div>
+                </header>
+            `;
+        }
+
+        // =============================================
+        // FOOTER
+        // =============================================
+        function loadFooter() {
+            document.getElementById('footer').innerHTML = `
+                <footer style="background: #f8f9fa; padding: 30px 0; border-top: 1px solid #eaeaea; text-align: center;">
+                    <div class="container">
+                        <p style="color: #666;">&copy; 2026 Udrive Bangladesh. All rights reserved.</p>
+                    </div>
+                </footer>
+            `;
+        }
+
+        // =============================================
+        // FORCE LOGOUT
+        // =============================================
+        window.forceLogout = async function() {
+            console.log("Force logout initiated...");
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            try {
+                if (window.supabaseClient) {
+                    await window.supabaseClient.auth.signOut();
+                }
+            } catch (error) {
+                console.log("Supabase signout failed, but storage is cleared.");
+            }
+            
+            window.location.replace('login.html');
+        };
+
+        // =============================================
+        // SEARCH CARS
+        // =============================================
+        function searchCars() {
+            window.location.href = 'search.html';
+        }
+
+        // =============================================
+        // SET DEFAULT DATES
+        // =============================================
+        function setDefaultDates() {
+            const today = new Date().toISOString().split('T')[0];
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            dateInputs.forEach(input => input.min = today);
+        }
+
+        // =============================================
+        // LOAD USER LISTED CARS
+        // =============================================
+        async function loadUserListedCars() {
+            const grid = document.getElementById('popularCars');
+            if (!grid) return;
+
+            if (!window.supabaseClient) return;
+
+            try {
+                const { data: cars, error } = await window.supabaseClient
+                    .from('cars')
+                    .select('*')
+                    .eq('status', 'approved')
+                    .order('created_at', { ascending: false })
+                    .limit(6);
+
+                if (error || !cars || cars.length === 0) {
+                    grid.innerHTML = '<p style="text-align:center; color:#999;">No cars available</p>';
+                    return;
+                }
+
+                grid.innerHTML = '';
+
+                cars.forEach(car => {
+                    const carDiv = document.createElement('div');
+                    carDiv.className = 'car-card';
+                    
+                    let img = 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800';
+                    if (car.images && car.images.length > 0) {
+                        img = typeof car.images[0] === 'string' ? car.images[0] : car.images[0]?.data || img;
+                    }
+
+                    carDiv.innerHTML = `
+                        <div class="car-image">
+                            <img src="${img}" alt="${car.make || car.name}" onerror="this.src='https://via.placeholder.com/400'">
+                            <div class="verified-badge"><i class="fas fa-check-circle"></i> Verified</div>
+                        </div>
+                        <div class="car-info">
+                            <h3>${car.name || `${car.make} ${car.model}`}</h3>
+                            <div class="car-specs">
+                                <span><i class="fas fa-users"></i> ${car.seats || 4} seats</span>
+                                <span><i class="fas fa-cog"></i> ${car.transmission || 'Auto'}</span>
+                            </div>
+                            <div class="car-price">
+                                <div class="price">৳${car.daily_rate}<span>/day</span></div>
+                                <a href="car-details.html?id=${car.id}" class="btn-secondary">View</a>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(carDiv);
+                });
+
+            } catch (error) {
+                console.error('Error loading cars:', error);
+                grid.innerHTML = '<p style="text-align:center; color:#999;">Failed to load cars</p>';
+            }
+        }
+    </script>
+</body>
+</html>

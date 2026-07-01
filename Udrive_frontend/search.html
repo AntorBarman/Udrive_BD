@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Cars - Udrive</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .search-page {
+            padding: 30px 0 60px;
+            min-height: calc(100vh - 160px);
+        }
+
+        .search-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .search-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar */
+        .filters-sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .filters-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .filters-card h3 {
+            font-size: 1.3rem;
+            color: #1e293b;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .filter-section {
+            margin-bottom: 22px;
+        }
+
+        .filter-section h4 {
+            font-size: 1rem;
+            color: #475569;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .price-slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0;
+            border-radius: 3px;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        .price-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #2563eb;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .price-range {
+            display: flex;
+            justify-content: space-between;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        #currentPrice {
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filter-options label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .filter-options input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: #2563eb;
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 11px 22px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+
+        .btn-outline:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        #applyFilters {
+            margin-bottom: 12px;
+        }
+
+        /* Results */
+        .results-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .results-header h1 {
+            font-size: 1.8rem;
+            color: #1e293b;
+        }
+
+        .sort-options select {
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: #475569;
+            background: white;
+            min-width: 190px;
+            cursor: pointer;
+        }
+
+        /* Cars Grid */
+        .cars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 22px;
+            margin-bottom: 35px;
+        }
+
+        @media (max-width: 576px) {
+            .cars-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .car-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            background: white;
+            cursor: pointer;
+        }
+
+        .car-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .car-image {
+            height: 190px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .car-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .car-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #2563eb;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .booked-badge {
+            background: #ef4444 !important;
+        }
+
+        .car-info {
+            padding: 18px;
+        }
+
+        .car-info h3 {
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .car-specs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+            color: #64748b;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .car-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+            color: #fbbf24;
+            font-size: 0.9rem;
+        }
+
+        .car-rating span {
+            color: #64748b;
+        }
+
+        .car-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .price span {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: normal;
+        }
+
+        .btn-sm {
+            padding: 7px 14px;
+            font-size: 0.85rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .page-info {
+            color: #475569;
+            font-weight: 500;
+        }
+
+        /* Header & Footer */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #0f766e;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #475569;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        footer {
+            background: #1e293b;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        /* States */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #64748b;
+            grid-column: 1/-1;
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            grid-column: 1/-1;
+        }
+
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 4px solid #f1f5f9;
+            border-top: 4px solid #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Results count */
+        .results-count {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header"></div>
+
+    <div class="search-page">
+        <div class="container">
+            <div class="search-layout">
+
+                <!-- Filters Sidebar -->
+                <aside class="filters-sidebar">
+                    <div class="filters-card">
+                        <h3><i class="fas fa-sliders-h" style="color:#2563eb; margin-right:8px;"></i>Filters</h3>
+
+                        <div class="filter-section">
+                            <h4>Price Range (per hour)</h4>
+                            <input type="range" min="100" max="1000" value="500" class="price-slider" id="priceSlider">
+                            <div class="price-range">
+                                <span>৳100</span>
+                                <span id="currentPrice">৳500</span>
+                                <span>৳1000</span>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <h4>Car Type</h4>
+                            <div class="filter-options">
+                                <label><input type="checkbox" value="sedan"> Sedan</label>
+                                <label><input type="checkbox" value="suv"> SUV</label>
+                                <label><input type="checkbox" value="hatchback"> Hatchback</label>
+                                <label><input type="checkbox" value="luxury"> Luxury</label>
+                                <label><input type="checkbox" value="van"> Van</label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <h4>Transmission</h4>
+                            <div class="filter-options">
+                                <label><input type="checkbox" value="Automatic"> Automatic</label>
+                                <label><input type="checkbox" value="Manual"> Manual</label>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <h4>Fuel Type</h4>
+                            <div class="filter-options">
+                                <label><input type="checkbox" value="Petrol"> Petrol</label>
+                                <label><input type="checkbox" value="Diesel"> Diesel</label>
+                                <label><input type="checkbox" value="CNG"> CNG</label>
+                                <label><input type="checkbox" value="Electric"> Electric</label>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-block" id="applyFilters">
+                            <i class="fas fa-check"></i> Apply Filters
+                        </button>
+                        <button class="btn btn-outline btn-block" id="resetFilters">
+                            <i class="fas fa-redo"></i> Reset All
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- Results -->
+                <main class="results-section">
+                    <div class="results-header">
+                        <h1>Available Cars</h1>
+                        <div class="sort-options">
+                            <select id="sortBy">
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="rating">Highest Rated</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <p class="results-count" id="resultsCount"></p>
+
+                    <div class="cars-grid" id="searchResults">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+
+                    <div class="pagination">
+                        <button class="btn btn-outline" id="prevPage" disabled>
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <span class="page-info">
+                            Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                        </span>
+                        <button class="btn btn-outline" id="nextPage" disabled>
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </main>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+
+    <script>
+        // ============================================================
+        // search.html — 100% Supabase Live Data, কোনো Static Data নেই
+        // ============================================================
+
+        // ============================================================
+        // search.html — Fixed Booking Filter (Timezone Bug Fixed)
+        // ============================================================
+
+        let ALL_CARS = [];
+        let FILTERED_CARS = [];
+        let currentPage = 1;
+        const carsPerPage = 6;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadHeader();
+            loadFooter();
+            setupEvents();
+            fetchCarsFromSupabase();
+        });
+
+        // ── Core fix: date format কে database এর format এর সাথে মেলানো ──
+        function getNowFormatted() {
+            // Database এ pickup_date/return_date "YYYY-MM-DDTHH:mm" format এ আছে
+            // তাই আমরাও same format এ local time নেব
+            const now = new Date();
+            // Local time এ YYYY-MM-DDTHH:mm বানানো
+            const pad = n => String(n).padStart(2, '0');
+            return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+        }
+
+        async function fetchCarsFromSupabase() {
+            showLoading();
+
+            try {
+                if (!window.supabaseClient) {
+                    showError("Database connection missing. Please refresh.");
+                    return;
+                }
+
+                // ধাপ ১: Approved সব গাড়ি আনো
+                const { data: cars, error: carError } = await window.supabaseClient
+                    .from('cars')
+                    .select('*')
+                    .eq('status', 'approved');
+
+                if (carError) throw carError;
+
+                if (!cars || cars.length === 0) {
+                    showEmpty("No approved cars available right now.");
+                    return;
+                }
+
+                // ধাপ ২: বর্তমান সময়ে Active বুকিং আনো
+                // ✅ FIX: toISOString() না দিয়ে local formatted string ব্যবহার
+                const now = getNowFormatted();
+                console.log("🕐 Current time for booking check:", now);
+
+                const { data: activeBookings, error: bookError } = await window.supabaseClient
+                    .from('bookings')
+                    .select('car_id, pickup_date, return_date, status')
+                    .in('status', ['pending', 'confirmed'])
+                    .lte('pickup_date', now)   // booking শুরু হয়ে গেছে
+                    .gte('return_date', now);  // booking এখনো শেষ হয়নি
+
+                if (bookError) {
+                    console.warn("Booking check failed:", bookError.message);
+                }
+
+                console.log("📋 Active bookings found:", activeBookings);
+
+                // ধাপ ৩: বুকড car_id গুলো Set এ রাখো
+                const bookedIds = new Set(
+                    (activeBookings || []).map(b => String(b.car_id))
+                );
+
+                console.log(`✅ Total approved cars: ${cars.length}`);
+                console.log(`🚫 Currently booked car IDs:`, [...bookedIds]);
+
+                // ধাপ ৪: বুকড গাড়ি বাদ দিয়ে ALL_CARS সেট করো
+                ALL_CARS = cars
+                    .filter(car => !bookedIds.has(String(car.id)))
+                    .map(car => normalizeCar(car));
+
+                console.log(`✅ Available cars to show: ${ALL_CARS.length}`);
+
+                FILTERED_CARS = [...ALL_CARS];
+                renderCars();
+
+            } catch (err) {
+                console.error("fetchCarsFromSupabase error:", err);
+                showError("Failed to load cars: " + err.message);
+            }
+        }
+
+        function normalizeCar(car) {
+            let img = 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800';
+
+            if (car.images) {
+                if (Array.isArray(car.images) && car.images.length > 0) {
+                    img = car.images[0]?.data || car.images[0] || img;
+                } else if (typeof car.images === 'string') {
+                    try { img = JSON.parse(car.images)[0] || img; } catch { img = car.images; }
+                }
+            } else if (car.image_url) {
+                img = car.image_url;
+            }
+
+            return {
+                id: car.id,
+                name: car.name || `${car.make || ''} ${car.model || ''}`.trim() || 'Unknown Car',
+                dailyRate: parseFloat(car.daily_rate) || 0,
+                hourlyRate: Math.round((parseFloat(car.daily_rate) || 0) / 24),
+                type: (car.type || 'sedan').toLowerCase(),
+                transmission: car.transmission || 'Automatic',
+                fuel: car.fuel_type || 'Petrol',
+                seats: parseInt(car.seats) || 4,
+                rating: parseFloat(car.rating) || 5.0,
+                location: car.location || 'Dhaka',
+                image: img,
+                badge: 'Verified'
+            };
+        }
+
+        function renderCars() {
+            const container = document.getElementById('searchResults');
+            if (!container) return;
+
+            const total = FILTERED_CARS.length;
+            const totalPages = Math.ceil(total / carsPerPage) || 1;
+
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const start = (currentPage - 1) * carsPerPage;
+            const pageCars = FILTERED_CARS.slice(start, start + carsPerPage);
+
+            safeSet('currentPage', currentPage);
+            safeSet('totalPages', totalPages);
+            safeSet('resultsCount', `${total} টি গাড়ি পাওয়া গেছে`);
+
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
+
+            if (pageCars.length === 0) {
+                container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-car"></i>
+                <h3>কোনো গাড়ি পাওয়া যায়নি</h3>
+                <p>Filter পরিবর্তন করে আবার চেষ্টা করুন।</p>
+                <button class="btn btn-primary" onclick="resetFilters()" style="margin-top:15px;">
+                    <i class="fas fa-redo"></i> Reset Filters
+                </button>
+            </div>`;
+                return;
+            }
+
+            container.innerHTML = pageCars.map(car => `
+        <div class="car-card" onclick="goToCarDetails('${car.id}')">
+            <div class="car-image">
+                <img src="${car.image}"
+                     alt="${car.name}"
+                     onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+                <span class="car-badge">${car.badge}</span>
+            </div>
+            <div class="car-info">
+                <h3>${car.name}</h3>
+                <div class="car-specs">
+                    <span><i class="fas fa-user-friends"></i> ${car.seats} আসন</span>
+                    <span><i class="fas fa-cog"></i> ${car.transmission}</span>
+                    <span><i class="fas fa-gas-pump"></i> ${car.fuel}</span>
+                </div>
+                <div class="car-rating">
+                    <i class="fas fa-star"></i>
+                    <span>${car.rating.toFixed(1)}</span>
+                </div>
+                <p style="color:#64748b; font-size:0.85rem; margin-bottom:8px;">
+                    <i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> ${car.location}
+                </p>
+                <div class="car-price">
+                    <div class="price">৳${car.hourlyRate}<span>/hour</span></div>
+                    <button class="btn btn-primary btn-sm">Details</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+        }
+
+        function goToCarDetails(carId) {
+            window.location.href = `car-details.html?id=${carId}`;
+        }
+
+        function applyFilters() {
+            const maxPrice = parseInt(document.getElementById('priceSlider')?.value || 1000);
+
+            const selectedTypes = Array.from(
+                document.querySelectorAll('.filter-options input[type="checkbox"][value="sedan"], .filter-options input[type="checkbox"][value="suv"], .filter-options input[type="checkbox"][value="hatchback"], .filter-options input[type="checkbox"][value="luxury"], .filter-options input[type="checkbox"][value="van"]')
+            ).filter(cb => cb.checked).map(cb => cb.value);
+
+            const selectedTrans = Array.from(
+                document.querySelectorAll('.filter-options input[type="checkbox"][value="Automatic"], .filter-options input[type="checkbox"][value="Manual"]')
+            ).filter(cb => cb.checked).map(cb => cb.value);
+
+            const selectedFuels = Array.from(
+                document.querySelectorAll('.filter-options input[type="checkbox"][value="Petrol"], .filter-options input[type="checkbox"][value="Diesel"], .filter-options input[type="checkbox"][value="CNG"], .filter-options input[type="checkbox"][value="Electric"]')
+            ).filter(cb => cb.checked).map(cb => cb.value);
+
+            FILTERED_CARS = ALL_CARS.filter(car => {
+                if (car.hourlyRate > maxPrice) return false;
+                if (selectedTypes.length > 0 && !selectedTypes.includes(car.type)) return false;
+                if (selectedTrans.length > 0 && !selectedTrans.includes(car.transmission)) return false;
+                if (selectedFuels.length > 0 && !selectedFuels.includes(car.fuel)) return false;
+                return true;
+            });
+
+            const sortVal = document.getElementById('sortBy')?.value || 'price-low';
+            if (sortVal === 'price-low') FILTERED_CARS.sort((a, b) => a.hourlyRate - b.hourlyRate);
+            if (sortVal === 'price-high') FILTERED_CARS.sort((a, b) => b.hourlyRate - a.hourlyRate);
+            if (sortVal === 'rating') FILTERED_CARS.sort((a, b) => b.rating - a.rating);
+
+            currentPage = 1;
+            renderCars();
+        }
+
+        function resetFilters() {
+            document.querySelectorAll('.filter-options input[type="checkbox"]').forEach(cb => cb.checked = false);
+            const slider = document.getElementById('priceSlider');
+            if (slider) { slider.value = 500; safeSet('currentPrice', '৳500'); }
+            const sort = document.getElementById('sortBy');
+            if (sort) sort.value = 'price-low';
+
+            FILTERED_CARS = [...ALL_CARS];
+            currentPage = 1;
+            renderCars();
+        }
+
+        function setupEvents() {
+            document.getElementById('priceSlider')?.addEventListener('input', function () {
+                safeSet('currentPrice', '৳' + this.value);
+            });
+            document.getElementById('applyFilters')?.addEventListener('click', applyFilters);
+            document.getElementById('resetFilters')?.addEventListener('click', resetFilters);
+            document.getElementById('sortBy')?.addEventListener('change', applyFilters);
+
+            document.getElementById('prevPage')?.addEventListener('click', () => {
+                if (currentPage > 1) { currentPage--; renderCars(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            });
+            document.getElementById('nextPage')?.addEventListener('click', () => {
+                const tp = Math.ceil(FILTERED_CARS.length / carsPerPage);
+                if (currentPage < tp) { currentPage++; renderCars(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            });
+        }
+
+        function showLoading() {
+            const c = document.getElementById('searchResults');
+            if (c) c.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+        }
+        function showEmpty(msg) {
+            const c = document.getElementById('searchResults');
+            if (c) c.innerHTML = `
+        <div class="empty-state">
+            <i class="fas fa-car"></i>
+            <h3>${msg}</h3>
+        </div>`;
+        }
+        function showError(msg) {
+            const c = document.getElementById('searchResults');
+            if (c) c.innerHTML = `
+        <div class="empty-state">
+            <i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i>
+            <h3 style="color:#ef4444;">Error</h3>
+            <p>${msg}</p>
+            <button class="btn btn-primary" onclick="fetchCarsFromSupabase()" style="margin-top:15px;">
+                <i class="fas fa-redo"></i> Retry
+            </button>
+        </div>`;
+        }
+        function safeSet(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        }
+
+        function loadHeader() {
+            const user = localStorage.getItem('udrive_user');
+            const headerEl = document.getElementById('header');
+            if (!headerEl) return;
+            headerEl.innerHTML = `
+        <header>
+            <div class="container">
+                <nav>
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-car" style="color:#ef4444; margin-right:5px;"></i> Udrive
+                    </a>
+                    <div class="nav-links">
+                        <a href="index.html">Home</a>
+                        <a href="search.html" style="color:#2563eb; font-weight:bold;">Search</a>
+                        ${user
+                    ? `<a href="bookings.html">My Bookings</a>
+                               <a href="#" onclick="logout(event)" style="color:#ef4444;">Logout</a>`
+                    : `<a href="login.html" style="color:#0f766e; font-weight:bold;">Login</a>`
+                }
+                    </div>
+                </nav>
+            </div>
+        </header>`;
+        }
+        function loadFooter() {
+            const el = document.getElementById('footer');
+            if (el) el.innerHTML = `
+        <footer>
+            <div class="container">
+                <p>&copy; 2026 Udrive Bangladesh. All rights reserved.</p>
+            </div>
+        </footer>`;
+        }
+        function logout(e) {
+            e.preventDefault();
+            localStorage.removeItem('udrive_user');
+            if (window.supabaseClient) window.supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

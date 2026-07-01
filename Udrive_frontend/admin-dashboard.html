@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Udrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Admin Header -->
+    <div id="adminHeader"></div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard">
+        <div class="container">
+            <div class="admin-layout">
+
+                <!-- Sidebar -->
+                <aside class="admin-sidebar">
+                    <div class="admin-profile">
+                        <div class="admin-avatar">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3>Admin Panel</h3>
+                        <p>System Administrator</p>
+                    </div>
+
+                    <nav class="admin-nav">
+                        <a href="admin-dashboard.html" class="nav-item active">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="admin-users.html" class="nav-item">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                        <a href="admin-cars.html" class="nav-item">
+                            <i class="fas fa-car"></i>
+                            <span>Cars</span>
+                        </a>
+                        <a href="admin-bookings.html" class="nav-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Bookings</span>
+                        </a>
+                        <a href="admin-kyc.html" class="nav-item">
+                            <i class="fas fa-user-check"></i>
+                            <span>KYC Requests</span>
+                        </a>
+                        <a href="admin-earners.html" class="nav-item">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Earners</span>
+                        </a>
+                        <a href="admin-payments.html" class="nav-item">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                        <a href="admin-reports.html" class="nav-item">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports</span>
+                        </a>
+                        <a href="admin-settings.html" class="nav-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="dashboard.html" class="nav-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Exit Admin</span>
+                        </a>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="admin-content">
+
+                    <!-- Welcome Banner -->
+                    <div style="background: linear-gradient(135deg, #1e293b 0%, #0f766e 100%); border-radius: 14px; padding: 25px 30px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 style="color: white; margin: 0 0 6px 0; font-size: 1.5rem;">Welcome, Admin 👋</h2>
+                            <p style="color: rgba(255,255,255,0.75); margin: 0; font-size: 0.95rem;" id="currentDateTime">Loading...</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="background: rgba(255,255,255,0.15); border-radius: 10px; padding: 10px 20px;">
+                                <p style="color: rgba(255,255,255,0.8); margin: 0; font-size: 0.8rem;">Platform Commission Rate</p>
+                                <h3 style="color: #10b981; margin: 4px 0 0 0; font-size: 1.6rem;" id="commissionRateDisplay">15%</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Overview -->
+                    <div class="stats-overview" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+                        <div class="stat-card admin-stat" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); display: flex; justify-content: space-between; align-items: center;">
+                            <div class="stat-info">
+                                <h3 id="totalRevenue" style="margin: 0 0 5px 0; font-size: 1.4rem; color: #1e293b;">৳0</h3>
+                                <p style="margin: 0; color: #64748b; font-size: 0.85rem;">Total Revenue</p>
+                            </div>
+                            <div style="width: 46px; height: 46px; background: #d1fae5; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-money-bill-wave" style="color: #059669; font-size: 1.2rem;"></i>
+                            </div>
+                        </div>
+
+                        <div class="stat-card admin-stat" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); display: flex; justify-content: space-between; align-items: center;">
+                            <div class="stat-info">
+                                <h3 id="platformRevenue" style="margin: 0 0 5px 0; font-size: 1.4rem; color: #1e293b;">৳0</h3>
+                                <p style="margin: 0; color: #64748b; font-size: 0.85rem;">Platform Commission</p>
+                            </div>
+                            <div style="width: 46px; height: 46px; background: #ede9fe; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-percentage" style="color: #7c3aed; font-size: 1.2rem;"></i>
+                            </div>
+                        </div>
+
+                        <div class="stat-card admin-stat" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); display: flex; justify-content: space-between; align-items: center;">
+                            <div class="stat-info">
+                                <h3 id="totalBookingsAdmin" style="margin: 0 0 5px 0; font-size: 1.4rem; color: #1e293b;">0</h3>
+                                <p style="margin: 0; color: #64748b; font-size: 0.85rem;">Total Bookings</p>
+                            </div>
+                            <div style="width: 46px; height: 46px; background: #dbeafe; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-calendar-check" style="color: #2563eb; font-size: 1.2rem;"></i>
+                            </div>
+                        </div>
+
+                        <div class="stat-card admin-stat" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); display: flex; justify-content: space-between; align-items: center;">
+                            <div class="stat-info">
+                                <h3 id="activeUsers" style="margin: 0 0 5px 0; font-size: 1.4rem; color: #1e293b;">0</h3>
+                                <p style="margin: 0; color: #64748b; font-size: 0.85rem;">Total Users</p>
+                            </div>
+                            <div style="width: 46px; height: 46px; background: #fef3c7; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-users" style="color: #d97706; font-size: 1.2rem;"></i>
+                            </div>
+                        </div>
+
+                        <div class="stat-card admin-stat" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); display: flex; justify-content: space-between; align-items: center;">
+                            <div class="stat-info">
+                                <h3 id="availableCars" style="margin: 0 0 5px 0; font-size: 1.4rem; color: #1e293b;">0</h3>
+                                <p style="margin: 0; color: #64748b; font-size: 0.85rem;">Approved Cars</p>
+                            </div>
+                            <div style="width: 46px; height: 46px; background: #fce7f3; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-car" style="color: #db2777; font-size: 1.2rem;"></i>
+                            </div>
+                        </div>
+
+                        <div class="stat-card admin-stat" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); display: flex; justify-content: space-between; align-items: center;">
+                            <div class="stat-info">
+                                <h3 id="confirmedBookings" style="margin: 0 0 5px 0; font-size: 1.4rem; color: #1e293b;">0</h3>
+                                <p style="margin: 0; color: #64748b; font-size: 0.85rem;">Confirmed Bookings</p>
+                            </div>
+                            <div style="width: 46px; height: 46px; background: #d1fae5; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-check-circle" style="color: #059669; font-size: 1.2rem;"></i>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Revenue Breakdown Row -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+
+                        <!-- Commission Breakdown Card -->
+                        <div style="background: white; border-radius: 14px; padding: 25px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);">
+                            <h3 style="margin: 0 0 20px 0; color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-chart-pie" style="color: #7c3aed;"></i> Revenue Breakdown
+                            </h3>
+                            <div id="revenueBreakdown">
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #059669;"></div>
+                                        <span style="color: #475569; font-size: 0.9rem;">Earner Payments</span>
+                                    </div>
+                                    <strong id="earnerTotal" style="color: #1e293b;">৳0</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #7c3aed;"></div>
+                                        <span style="color: #475569; font-size: 0.9rem;">Platform Commission</span>
+                                    </div>
+                                    <strong id="platformTotal" style="color: #1e293b;">৳0</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0 0 0;">
+                                    <span style="color: #1e293b; font-weight: 600;">Total Collected</span>
+                                    <strong id="grandTotal" style="color: #059669; font-size: 1.1rem;">৳0</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Charts -->
+                        <div style="background: white; border-radius: 14px; padding: 25px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);">
+                            <h3 style="margin: 0 0 15px 0; color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-chart-bar" style="color: #2563eb;"></i> Booking Statistics
+                            </h3>
+                            <canvas id="bookingChart" height="160"></canvas>
+                        </div>
+
+                    </div>
+
+                    <!-- Recent Bookings Table -->
+                    <div style="background: white; border-radius: 14px; padding: 25px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 30px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="margin: 0; color: #1e293b; font-size: 1.1rem;">
+                                <i class="fas fa-list" style="color: #2563eb; margin-right: 8px;"></i> Recent Bookings
+                            </h3>
+                            <a href="admin-bookings.html" style="color: #2563eb; text-decoration: none; font-size: 0.9rem; font-weight: 500;">View All →</a>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                                <thead>
+                                    <tr style="background: #f8fafc;">
+                                        <th style="padding: 12px 15px; text-align: left; color: #64748b; font-weight: 600; border-bottom: 1px solid #e2e8f0;">Booking ID</th>
+                                        <th style="padding: 12px 15px; text-align: left; color: #64748b; font-weight: 600; border-bottom: 1px solid #e2e8f0;">Car</th>
+                                        <th style="padding: 12px 15px; text-align: left; color: #64748b; font-weight: 600; border-bottom: 1px solid #e2e8f0;">Pickup Date</th>
+                                        <th style="padding: 12px 15px; text-align: left; color: #64748b; font-weight: 600; border-bottom: 1px solid #e2e8f0;">Amount</th>
+                                        <th style="padding: 12px 15px; text-align: left; color: #64748b; font-weight: 600; border-bottom: 1px solid #e2e8f0;">Commission</th>
+                                        <th style="padding: 12px 15px; text-align: left; color: #64748b; font-weight: 600; border-bottom: 1px solid #e2e8f0;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentBookingsTable">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; padding: 30px; color: #64748b;">
+                                            <i class="fas fa-spinner fa-spin"></i> Loading bookings...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pending Actions Row -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+                        <div style="background: white; border-radius: 14px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); text-align: center; border-top: 4px solid #f59e0b;">
+                            <i class="fas fa-user-clock" style="font-size: 2rem; color: #f59e0b; margin-bottom: 10px;"></i>
+                            <h4 style="margin: 0 0 5px 0; color: #1e293b;">Pending KYC</h4>
+                            <div style="font-size: 2rem; font-weight: 700; color: #f59e0b; margin: 10px 0;" id="pendingKYCCount">0</div>
+                            <a href="admin-kyc.html" style="display: inline-block; padding: 8px 20px; background: #f59e0b; color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">Review Now</a>
+                        </div>
+
+                        <div style="background: white; border-radius: 14px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); text-align: center; border-top: 4px solid #2563eb;">
+                            <i class="fas fa-car" style="font-size: 2rem; color: #2563eb; margin-bottom: 10px;"></i>
+                            <h4 style="margin: 0 0 5px 0; color: #1e293b;">Car Approvals</h4>
+                            <div style="font-size: 2rem; font-weight: 700; color: #2563eb; margin: 10px 0;" id="pendingCarsCount">0</div>
+                            <a href="admin-cars.html" style="display: inline-block; padding: 8px 20px; background: #2563eb; color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">Approve Now</a>
+                        </div>
+
+                        <div style="background: white; border-radius: 14px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); text-align: center; border-top: 4px solid #10b981;">
+                            <i class="fas fa-wallet" style="font-size: 2rem; color: #10b981; margin-bottom: 10px;"></i>
+                            <h4 style="margin: 0 0 5px 0; color: #1e293b;">Wallet Transactions</h4>
+                            <div style="font-size: 2rem; font-weight: 700; color: #10b981; margin: 10px 0;" id="walletTxCount">0</div>
+                            <a href="admin-payments.html" style="display: inline-block; padding: 8px 20px; background: #10b981; color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">View All</a>
+                        </div>
+
+                        <div style="background: white; border-radius: 14px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); text-align: center; border-top: 4px solid #7c3aed;">
+                            <i class="fas fa-percentage" style="font-size: 2rem; color: #7c3aed; margin-bottom: 10px;"></i>
+                            <h4 style="margin: 0 0 5px 0; color: #1e293b;">Commission Earned</h4>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #7c3aed; margin: 10px 0;" id="commissionEarned">৳0</div>
+                            <span style="display: inline-block; padding: 8px 20px; background: #ede9fe; color: #7c3aed; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">15% per booking</span>
+                        </div>
+
+                    </div>
+
+                    <!-- Recent Wallet Transactions -->
+                    <div style="background: white; border-radius: 14px; padding: 25px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="margin: 0; color: #1e293b; font-size: 1.1rem;">
+                                <i class="fas fa-exchange-alt" style="color: #7c3aed; margin-right: 8px;"></i> Recent Commission Transactions
+                            </h3>
+                            <button onclick="loadDashboardData()" style="padding: 6px 14px; background: #f1f5f9; border: none; border-radius: 6px; cursor: pointer; color: #475569; font-size: 0.85rem;">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                        <div id="recentTransactions">
+                            <div style="text-align: center; padding: 20px; color: #64748b;">
+                                <i class="fas fa-spinner fa-spin"></i> Loading...
+                            </div>
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Scripts — সঠিক ORDER এ লোড করা -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+    // ====================================================
+    // ✅ এখানে তোমার Platform User ID বসাও
+    // Supabase → Authentication → Users থেকে UUID কপি করো
+    // ====================================================
+    const PLATFORM_USER_ID = '778c861e-be60-49ee-a968-25b299fabccf';
+    const COMMISSION_RATE  = 15; // ১৫%
+
+    // ====================================================
+    // Dashboard Load
+    // ====================================================
+    document.addEventListener('DOMContentLoaded', function () {
+        loadAdminHeader();
+        loadFooter();
+        setDateTime();
+        loadDashboardData();
+    });
+
+    // তারিখ ও সময় দেখানো
+    function setDateTime() {
+        const el = document.getElementById('currentDateTime');
+        if (!el) return;
+        const now = new Date();
+        el.textContent = now.toLocaleString('en-BD', {
+            weekday: 'long', year: 'numeric',
+            month: 'long', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+    }
+
+    // ====================================================
+    // Main Data Loader
+    // ====================================================
+    async function loadDashboardData() {
+        if (!window.supabaseClient) {
+            console.error("❌ Supabase connected নেই!");
+            return;
+        }
+
+        try {
+            // ১. Pending KYC count
+            const { count: pendingKYC } = await window.supabaseClient
+                .from('kyc_verifications')
+                .select('*', { count: 'exact', head: true })
+                .eq('status', 'pending');
+
+            // ২. Pending Cars count
+            const { count: pendingCars } = await window.supabaseClient
+                .from('cars')
+                .select('*', { count: 'exact', head: true })
+                .eq('status', 'pending');
+
+            // ৩. Approved Cars count
+            const { count: approvedCars } = await window.supabaseClient
+                .from('cars')
+                .select('*', { count: 'exact', head: true })
+                .eq('status', 'approved');
+
+            // ৪. Total Users count
+            const { count: totalUsers } = await window.supabaseClient
+                .from('profiles')
+                .select('*', { count: 'exact', head: true });
+
+            // ৫. Total Bookings
+            const { count: totalBookings } = await window.supabaseClient
+                .from('bookings')
+                .select('*', { count: 'exact', head: true });
+
+            // ৬. Confirmed Bookings ও Total Revenue
+            const { data: confirmedBookings } = await window.supabaseClient
+                .from('bookings')
+                .select('total_price')
+                .eq('status', 'confirmed');
+
+            const totalRevenue = (confirmedBookings || [])
+                .reduce((sum, b) => sum + (parseFloat(b.total_price) || 0), 0);
+
+            const confirmedCount = (confirmedBookings || []).length;
+
+            // ৭. Platform Commission (wallet_transactions থেকে)
+            let platformRevenue = 0;
+            let earnerTotal = 0;
+            let walletTxCount = 0;
+
+            if (PLATFORM_USER_ID && !PLATFORM_USER_ID.includes('এখানে')) {
+                const { data: commissionData } = await window.supabaseClient
+                    .from('wallet_transactions')
+                    .select('amount')
+                    .eq('user_id', PLATFORM_USER_ID)
+                    .eq('type', 'credit');
+
+                platformRevenue = (commissionData || [])
+                    .reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
+
+                // Earner এর মোট পাওয়া = Total Revenue - Platform Commission
+                earnerTotal = totalRevenue - platformRevenue;
+
+                // Total wallet transaction count
+                const { count: txCount } = await window.supabaseClient
+                    .from('wallet_transactions')
+                    .select('*', { count: 'exact', head: true });
+                walletTxCount = txCount || 0;
+            } else {
+                // Platform ID না থাকলে estimate দেখাও
+                platformRevenue = totalRevenue * (COMMISSION_RATE / 100);
+                earnerTotal = totalRevenue - platformRevenue;
+                console.warn("⚠️ PLATFORM_USER_ID সেট করা হয়নি! Estimated commission দেখানো হচ্ছে।");
+            }
+
+            // ====== Screen Update ======
+            safeSet('totalRevenue',      `৳${Math.round(totalRevenue).toLocaleString()}`);
+            safeSet('platformRevenue',   `৳${Math.round(platformRevenue).toLocaleString()}`);
+            safeSet('totalBookingsAdmin', totalBookings || 0);
+            safeSet('activeUsers',        totalUsers || 0);
+            safeSet('availableCars',      approvedCars || 0);
+            safeSet('confirmedBookings',  confirmedCount);
+            safeSet('pendingKYCCount',    pendingKYC || 0);
+            safeSet('pendingCarsCount',   pendingCars || 0);
+            safeSet('walletTxCount',      walletTxCount);
+            safeSet('commissionEarned',  `৳${Math.round(platformRevenue).toLocaleString()}`);
+
+            // Revenue Breakdown
+            safeSet('earnerTotal',   `৳${Math.round(earnerTotal).toLocaleString()}`);
+            safeSet('platformTotal', `৳${Math.round(platformRevenue).toLocaleString()}`);
+            safeSet('grandTotal',    `৳${Math.round(totalRevenue).toLocaleString()}`);
+
+            // Chart ও Tables লোড
+            loadBookingChart(confirmedCount, (totalBookings || 0) - confirmedCount, pendingKYC || 0);
+            await loadRecentBookings();
+            await loadRecentCommissions();
+
+            console.log("✅ Admin dashboard loaded successfully!");
+
+        } catch (err) {
+            console.error("❌ Dashboard error:", err);
+        }
+    }
+
+    // ====================================================
+    // Booking Chart
+    // ====================================================
+    let chartInstance = null;
+
+    function loadBookingChart(confirmed, pending, kyc) {
+        const ctx = document.getElementById('bookingChart');
+        if (!ctx) return;
+
+        if (chartInstance) chartInstance.destroy();
+
+        chartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Confirmed', 'Pending', 'KYC Pending'],
+                datasets: [{
+                    data: [confirmed || 0, pending || 0, kyc || 0],
+                    backgroundColor: ['#10b981', '#f59e0b', '#2563eb'],
+                    borderWidth: 0,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 15, font: { size: 12 } }
+                    }
+                },
+                cutout: '65%'
+            }
+        });
+    }
+
+    // ====================================================
+    // Recent Bookings Table
+    // ====================================================
+    async function loadRecentBookings() {
+        const tbody = document.getElementById('recentBookingsTable');
+        if (!tbody) return;
+
+        try {
+            const { data: bookings, error } = await window.supabaseClient
+                .from('bookings')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(8);
+
+            if (error) throw error;
+
+            if (!bookings || bookings.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:25px; color:#64748b;">No bookings found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = bookings.map(b => {
+                const amount     = parseFloat(b.total_price) || 0;
+                const commission = Math.round(amount * COMMISSION_RATE / 100);
+                const status     = (b.status || 'pending').toLowerCase();
+
+                const statusColors = {
+                    confirmed: { bg: '#d1fae5', color: '#065f46' },
+                    pending:   { bg: '#fef3c7', color: '#92400e' },
+                    cancelled: { bg: '#fee2e2', color: '#991b1b' }
+                };
+                const sc = statusColors[status] || { bg: '#f1f5f9', color: '#475569' };
+
+                const bId = (b.booking_id || b.id || 'N/A').toString().substring(0, 8).toUpperCase();
+
+                return `
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 12px 15px; color: #475569; font-size: 0.85rem;">#${bId}</td>
+                    <td style="padding: 12px 15px; font-weight: 600; color: #1e293b;">${b.car_name || 'Unknown Car'}</td>
+                    <td style="padding: 12px 15px; color: #475569;">${b.pickup_date || 'N/A'}</td>
+                    <td style="padding: 12px 15px; color: #2563eb; font-weight: 700;">৳${amount.toLocaleString()}</td>
+                    <td style="padding: 12px 15px; color: #7c3aed; font-weight: 600;">৳${commission.toLocaleString()}</td>
+                    <td style="padding: 12px 15px;">
+                        <span style="background:${sc.bg}; color:${sc.color}; padding:4px 10px; border-radius:20px; font-size:0.8rem; font-weight:600; text-transform:capitalize;">
+                            ${status}
+                        </span>
+                    </td>
+                </tr>`;
+            }).join('');
+
+        } catch (err) {
+            console.error("Recent bookings error:", err);
+            tbody.innerHTML = `<tr><td colspan="6" style="color:red; text-align:center; padding:20px;">Error: ${err.message}</td></tr>`;
+        }
+    }
+
+    // ====================================================
+    // Recent Commission Transactions
+    // ====================================================
+    async function loadRecentCommissions() {
+        const container = document.getElementById('recentTransactions');
+        if (!container) return;
+
+        try {
+            if (!PLATFORM_USER_ID || PLATFORM_USER_ID.includes('এখানে')) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:25px; background:#fef3c7; border-radius:8px; color:#92400e;">
+                        <i class="fas fa-exclamation-triangle" style="font-size:1.5rem; margin-bottom:8px;"></i>
+                        <p style="margin:0; font-weight:600;">PLATFORM_USER_ID সেট করা হয়নি!</p>
+                        <p style="margin:8px 0 0 0; font-size:0.9rem;">
+                            Supabase → Authentication → Users থেকে তোমার Platform account এর UUID কপি করে<br>
+                            এই ফাইলের script এ <code>PLATFORM_USER_ID</code> variable এ বসাও।
+                        </p>
+                    </div>`;
+                return;
+            }
+
+            const { data: transactions, error } = await window.supabaseClient
+                .from('wallet_transactions')
+                .select('*')
+                .eq('user_id', PLATFORM_USER_ID)
+                .eq('type', 'credit')
+                .order('created_at', { ascending: false })
+                .limit(6);
+
+            if (error) throw error;
+
+            if (!transactions || transactions.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:30px; color:#64748b;">
+                        <i class="fas fa-exchange-alt" style="font-size:2rem; color:#cbd5e1; margin-bottom:10px;"></i>
+                        <p>এখনো কোনো commission transaction হয়নি।</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = transactions.map(tx => {
+                const date = new Date(tx.created_at).toLocaleString('en-BD', {
+                    day: 'numeric', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+                return `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid #f1f5f9;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="width:38px; height:38px; background:#ede9fe; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                            <i class="fas fa-percentage" style="color:#7c3aed; font-size:0.9rem;"></i>
+                        </div>
+                        <div>
+                            <p style="margin:0; font-size:0.9rem; color:#1e293b; font-weight:500;">
+                                ${tx.description || 'Commission'}
+                            </p>
+                            <small style="color:#64748b;">${date}</small>
+                        </div>
+                    </div>
+                    <span style="color:#7c3aed; font-weight:700; font-size:1rem;">+৳${parseFloat(tx.amount).toLocaleString()}</span>
+                </div>`;
+            }).join('');
+
+        } catch (err) {
+            console.error("Commission transactions error:", err);
+            container.innerHTML = `<p style="color:red; padding:15px;">Error: ${err.message}</p>`;
+        }
+    }
+
+    // ====================================================
+    // Helper: safely set element text
+    // ====================================================
+    function safeSet(id, value) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    }
+
+    // ====================================================
+    // Header & Footer
+    // ====================================================
+    function loadAdminHeader() {
+        const header = document.getElementById('adminHeader');
+        if (!header) return;
+        header.innerHTML = `
+            <header style="background:#1e293b; padding:15px 0; position:sticky; top:0; z-index:100; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+                <div class="container" style="display:flex; justify-content:space-between; align-items:center; max-width:1200px; margin:0 auto; padding:0 20px;">
+                    <a href="admin-dashboard.html" style="font-size:1.4rem; font-weight:bold; color:white; text-decoration:none; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-car" style="color:#10b981;"></i>
+                        Udrive <span style="font-size:0.8rem; background:#10b981; padding:2px 8px; border-radius:4px; margin-left:5px;">Admin</span>
+                    </a>
+                    <div style="display:flex; gap:12px; align-items:center;">
+                        <button onclick="loadDashboardData()" style="padding:7px 14px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:white; cursor:pointer; font-size:0.85rem;">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <a href="admin-kyc.html" style="padding:7px 14px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:white; text-decoration:none; font-size:0.85rem;">
+                            <i class="fas fa-user-check"></i> KYC
+                        </a>
+                        <a href="admin-cars.html" style="padding:7px 14px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:white; text-decoration:none; font-size:0.85rem;">
+                            <i class="fas fa-car"></i> Cars
+                        </a>
+                        <a href="dashboard.html" style="padding:7px 14px; background:#ef4444; border:none; border-radius:6px; color:white; text-decoration:none; font-size:0.85rem;">
+                            <i class="fas fa-sign-out-alt"></i> Exit
+                        </a>
+                    </div>
+                </div>
+            </header>`;
+    }
+
+    function loadFooter() {
+        const footer = document.getElementById('footer');
+        if (footer) {
+            footer.innerHTML = `
+                <footer style="background:#1e293b; color:white; padding:20px; text-align:center; margin-top:40px; font-size:0.9rem;">
+                    &copy; 2026 Udrive Bangladesh Admin Panel. All rights reserved.
+                </footer>`;
+        }
+    }
+    </script>
+
+</body>
+</html>
